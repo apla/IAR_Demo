@@ -12,7 +12,7 @@
           
           
           
-        <Column0>310</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>327</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Build>
         
@@ -20,7 +20,7 @@
         
         
       <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1071</ColumnWidth1><ColumnWidth2>285</ColumnWidth2><ColumnWidth3>71</ColumnWidth3></Build>
-    <TerminalIO/></Static>
+    <TerminalIO/><Find-in-Files><ColumnWidth0>439</ColumnWidth0><ColumnWidth1>73</ColumnWidth1><ColumnWidth2>659</ColumnWidth2><ColumnWidth3>293</ColumnWidth3></Find-in-Files></Static>
     <Windows>
       
       
@@ -32,7 +32,7 @@
             <Factory>Workspace</Factory>
             <Session>
               
-            <NodeDict><ExpandedNode>Iar_Demo</ExpandedNode><ExpandedNode>Iar_Demo/System</ExpandedNode><ExpandedNode>Iar_Demo/User</ExpandedNode></NodeDict></Session>
+            <NodeDict><ExpandedNode>Iar_Demo</ExpandedNode><ExpandedNode>Iar_Demo/User</ExpandedNode></NodeDict></Session>
           </Tab>
         </Tabs>
         
@@ -44,7 +44,7 @@
             <Factory>Build</Factory>
             <Session/>
           </Tab>
-        </Tabs>
+        <Tab><Identity>TabID-5676-4748</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs>
         
       <SelectedTab>0</SelectedTab></Wnd1></Windows>
     <Editor>
@@ -52,14 +52,14 @@
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\doc\infocenter\index.ENU.html</Filename></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\FWlib\src\stm32f10x_wwdg.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>157</YPos2><SelStart2>4572</SelStart2><SelEnd2>4572</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\FWlib\src\misc.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>83</YPos2><SelStart2>2964</SelStart2><SelEnd2>2964</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>66</SelStart2><SelEnd2>66</SelEnd2></Tab><ActiveTab>3</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\stm32f10x_conf.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>24</YPos2><SelStart2>1487</SelStart2><SelEnd2>1487</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\CMSIS\startup\startup_stm32f10x_md.s</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>108</YPos2><SelStart2>6097</SelStart2><SelEnd2>6097</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\System\sys\sys.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>18</SelStart2><SelEnd2>18</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\System\delay\delay.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>153</SelStart2><SelEnd2>153</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\System\delay\delay.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>3</YPos2><SelStart2>240</SelStart2><SelEnd2>250</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\System\sys\sys.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>62</SelStart2><SelEnd2>62</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\doc\infocenter\index.ENU.html</Filename></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>6</YPos2><SelStart2>58</SelStart2><SelEnd2>58</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\CMSIS\startup\startup_stm32f10x_md.s</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>111</YPos2><SelStart2>6087</SelStart2><SelEnd2>6087</SelEnd2></Tab><ActiveTab>2</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-01195C98><key>iaridepm.enu1</key></Toolbar-01195C98></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>413</Bottom><Right>384</Right><x>-2</x><y>-2</y><xscreen>258</xscreen><yscreen>246</yscreen><sizeHorzCX>181180</sizeHorzCX><sizeHorzCY>350427</sizeHorzCY><sizeVertCX>271067</sizeVertCX><sizeVertCY>591168</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>244</Bottom><Right>1426</Right><x>-2</x><y>-2</y><xscreen>1428</xscreen><yscreen>246</yscreen><sizeHorzCX>1002809</sizeHorzCX><sizeHorzCY>350427</sizeHorzCY><sizeVertCX>181180</sizeVertCX><sizeVertCY>350427</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-0031CC90><key>iaridepm.enu1</key></Toolbar-0031CC90></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>484</Bottom><Right>401</Right><x>-2</x><y>-2</y><xscreen>269</xscreen><yscreen>284</yscreen><sizeHorzCX>180901</sizeHorzCX><sizeHorzCY>350185</sizeHorzCY><sizeVertCX>271015</sizeVertCX><sizeVertCY>599260</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>282</Bottom><Right>1489</Right><x>-2</x><y>-2</y><xscreen>1491</xscreen><yscreen>284</yscreen><sizeHorzCX>1002690</sizeHorzCX><sizeHorzCY>350185</sizeHorzCY><sizeVertCX>180901</sizeVertCX><sizeVertCY>350185</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

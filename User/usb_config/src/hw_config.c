@@ -15,38 +15,33 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
+
 #include "stm32f10x_tim.h"
 #include "platform_config.h"
-//#include "stm32f10x_map.h"
-#include "stm32f10x_bkp.h"
-//#include "stm32f10x_systick.h"
-
-#include "usb_type.h"
-
 #include "hw_config.h"
+#include "usb_type.h"
 #include "usb_lib.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
+#include "delay.h"
 #include <stdint.h>
+
 #define BOOL bool
 ErrorStatus HSEStartUpStatus;
-void RTC_Configuration(void);
+
 void Timer2Configuration(void);
 void RCC_Configuration(void);
-void NVIC_Configuration(void);
+void LED_Init(void);
+void GPIO_Config(void);
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define ADC1_DR_Address    ((u32)0x4001244C)
+
 
 void Set_System(void)
-{ 
-     RCC_Configuration();
-     //NVIC_Configuration();
-//   GPIO_Configuration();
-//   CPU_initializePin( PIN_USB_DP, GPIO_Mode_Out_PP, GPIO_DIR_OUT, GPIO_VALUE_LOW);
-//   CPU_initializePin( PIN_USB_DM, GPIO_Mode_Out_PP, GPIO_DIR_OUT, GPIO_VALUE_LOW);
-//   CPU_initializePin( PIN_USB_DP, GPIO_Mode_IN_FLOATING, 0, 0);
-//   CPU_initializePin( PIN_USB_DM, GPIO_Mode_IN_FLOATING, 0, 0);
+{
+    RCC_Configuration();
+    //NVIC_Config
+    NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00); 
     GPIO_InitTypeDef GPIO_InitStructure;       
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -60,29 +55,35 @@ void Set_System(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
   //  Timer2Configuration();
+    LED_Init();
+    delay_init();
+    //GPIO_Config();
 }
 
 void LED_Init(void)
 {
-#ifdef stm32f103_eval
-  GPIO_InitTypeDef GPIO_InitStructure;
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);	
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;			 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-  GPIO_SetBits(GPIOC,GPIO_Pin_13);
-#else //our:pb5
+  //our:pb5
   GPIO_InitTypeDef GPIO_InitStructure;
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;			 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
- // GPIOB->BSRR = GPIO_Pin_5;
-  GPIO_SetBits(GPIOB,GPIO_Pin_5);
-#endif  
+  // GPIOB->BSRR = GPIO_Pin_5;
+  GPIO_SetBits(GPIOB,GPIO_Pin_5); 
 }
+
+void GPIO_Config(void)
+{ 
+      GPIO_InitTypeDef  GPIO_InitStructure; 	
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);   
+      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+      GPIO_Init(GPIOA, &GPIO_InitStructure);//PA3_dutycircle 
+      GPIO_SetBits(GPIOB,GPIO_Pin_5);
+}
+
 #ifdef stm32f103_eval //¿ª·¢°å8M osc
 void RCC_Configuration(void)
 {

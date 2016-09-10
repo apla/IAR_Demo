@@ -23,8 +23,8 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-u8 Rx_Buffer[nReportCnt]="123456789a123456789a123456789a123456789a123456789a123456789a1234";
-u8 Tx_Buffer[nReportCnt]="123456789a123456789a123456789a123456789a123456789a123456789a1234";
+u8 Rx_Buffer[nReportCnt]="aaabbbccdddeeefff000111222333444aaabbbccdddeeefff000111222333444";
+u8 Tx_Buffer[nReportCnt]="aaabbbccdddeeefff000111222333444aaabbbccdddeeefff000111222333444";
 u8 USB_ReceiveFlg = FALSE;
 extern vu8 MsgCmd;
 
@@ -40,22 +40,14 @@ extern vu8 MsgCmd;
 // 数据接收: USB_LP_CAN1_RX0_IRQHandler--->USB_Istr---->CTR_LP--->EPx_OUT_Callback
 // 数据发送: UserToPMABufferCopy--->SetEPTxCount--->SetEPTxValid 
 void EP1_OUT_Callback(void)
-{     
-//    volatile static bool flag = TRUE;
-//    flag = !flag;
-//    if(flag)
-//       GPIOB->BSRR = GPIO_Pin_5;
-//     else 
-//       GPIOB->BRR = GPIO_Pin_5;
+{        
      USB_ReceiveFlg = TRUE;//设置接收到数据标志位     
      GPIO_WriteBit(GPIOB, GPIO_Pin_5 ,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
      
-     
      //将PMA双缓冲区中数据取到用户缓冲区
- //    PMAToUserBufferCopy(Receive_Buffer, ENDP1_RXADDR,nReportCnt);
-//     MsgCmd = Receive_Buffer[21];
+     PMAToUserBufferCopy(Rx_Buffer, ENDP1_RXADDR,nReportCnt);    
      //设置端点的接收状态为有效，因为端点接收到数据后会端点状态自动设置成停止状态
-      SetEPRxStatus(ENDP1, EP_RX_VALID);
+     SetEPRxStatus(ENDP1, EP_RX_VALID);
 }
 
 void EP2_IN_Callback(void)

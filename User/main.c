@@ -1,30 +1,27 @@
 #include "stm32f10x.h"
-#include "hw_config.h"
-#include "usb_lib.h"
-#include "usb_pwr.h"
-#include "delay.h"
 #include "cpu_init.h"
+#include "usb_lib.h"
 #include "i2c1_sensor.h"
-extern u8 USB_ReceiveFlg;
 
-extern u8 Rx_Buffer[nReportCnt];
-extern u8 Tx_Buffer[nReportCnt];
-void USB_SendString(u8 *str); 
+extern u8   USB_ReceiveFlg;
+extern u8   Rx_Buffer[nReportCnt];
+extern u8   Tx_Buffer[nReportCnt];
+extern void USB_SendString(u8 *str);
+
 int main(void)
-{  	
-  u8 buf[255] = {0};
-   NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
-  RCC_Config();
-  delay_init();
-  //GPIO_Config();
+{       
+  Set_System(); 
+  EXTIX_Init();
+  while(1){
+    
+  }
   
-  Set_System();
+#ifdef USB_HID
   USB_Interrupts_Config();
   Set_USBClock();
   USB_Init();
   USB_ReceiveFlg = FALSE;
-  //I2C_Screen_Init();
-  
+  //I2C_Screen_Init();  
   
   //I2C_ByteWrite(0x02,buf);
  // I2C_ByteWrite(0x01, 0x10);//LCM_AVEE: -5.6v 
@@ -34,8 +31,7 @@ int main(void)
   while(1){
         if(USB_ReceiveFlg == TRUE){
            USB_ReceiveFlg = FALSE;
-           USB_SendString("1TRUE==USB_ReceiveFlag");
-           delay_ms(500);    
+           USB_SendString(Rx_Buffer);           
          }
 //      GPIO_ResetBits(GPIOB,GPIO_Pin_5);  
 //      delay_ms(500);  		   
@@ -44,14 +40,14 @@ int main(void)
 //      delay_ms(500);                 
 //      delay_us(1000000);        
   }	
+#endif
 }
 
 //Êý¾Ý·¢ËÍ: UserToPMABufferCopy--->SetEPTxCount--->SetEPTxValid 
 void USB_SendString(u8 *str)
 {
      u8 i=0;
-     while(*str)
-     {
+     while(*str){
          Tx_Buffer[i++]=*(str++);
          if (i == nReportCnt) break;
      }

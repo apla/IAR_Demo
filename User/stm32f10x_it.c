@@ -50,19 +50,18 @@ void NMI_Handler(void)
 
 void USB_LP_CAN1_RX0_IRQHandler(void)//start.s
 {
-    static u8 flag = 0;
     USB_Istr();
-    GPIOB->BRR = GPIO_Pin_5;
-//    flag = ~flag;
-//    if(flag){
-//      GPIOB->BSRR = GPIO_Pin_5;
-//      delay_ms(500);
-//    }else{
-//      GPIOB->BRR = GPIO_Pin_5;
-//      delay_ms(500);
-//    }
 }
-
+void EXTI0_IRQHandler(void)
+{
+   GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+   EXTI_ClearITPendingBit(EXTI_Line0); 
+}
+void EXTI1_IRQHandler(void)
+{
+  GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+  EXTI_ClearITPendingBit(EXTI_Line1); 
+}
 void TIM2_IRQHandler(void)  // 1s enter
 {
 #if 0

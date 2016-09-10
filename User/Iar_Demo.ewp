@@ -2000,6 +2000,9 @@
       <name>$PROJ_DIR$\main.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\my_i2c.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\stm32f10x_it.c</name>
     </file>
     <file>

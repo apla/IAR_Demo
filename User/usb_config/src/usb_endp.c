@@ -37,6 +37,11 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint8_t Receive_Buffer[2];
+#define nReportCnt 64
+u8 Rx_Buffer[nReportCnt]="123456789a123456789a123456789a123456789a123456789a123456789a1234";
+u8 Tx_Buffer[nReportCnt]="123456789a123456789a123456789a123456789a123456789a123456789a1234";
+u8 USB_ReceiveFlg = FALSE;
+
 extern __IO uint8_t PrevXferComplete;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -47,74 +52,22 @@ extern __IO uint8_t PrevXferComplete;
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
+// 数据接收: USB_LP_CAN1_RX0_IRQHandler--->USB_Istr---->CTR_LP--->EPx_OUT_Callback
+// 数据发送: UserToPMABufferCopy--->SetEPTxCount--->SetEPTxValid 
 void EP1_OUT_Callback(void)
 {
-  BitAction Led_State;
-
-  /* Read received data (2 bytes) */  
-  USB_SIL_Read(EP1_OUT, Receive_Buffer);
-  
-  if (Receive_Buffer[1] == 0)
-  {
-    Led_State = Bit_RESET;
-  }
-  else 
-  {
-    Led_State = Bit_SET;
-  }
- 
- 
-  switch (Receive_Buffer[0])
-  {
-    case 1: /* Led 1 */
-     if (Led_State != Bit_RESET)
-     {
-       STM_EVAL_LEDOn(LED1);
-     }
-     else
-     {
-       STM_EVAL_LEDOff(LED1);
-     }
-     break;
-    case 2: /* Led 2 */
-     if (Led_State != Bit_RESET)
-     {
-       STM_EVAL_LEDOn(LED2);
-     }
-     else
-     {
-       STM_EVAL_LEDOff(LED2);
-     }
-      break;
-    case 3: /* Led 3 */
-     if (Led_State != Bit_RESET)
-     {
-       STM_EVAL_LEDOn(LED3);
-     }
-     else
-     {
-       STM_EVAL_LEDOff(LED3);
-     }
-      break;
-    case 4: /* Led 4 */
-     if (Led_State != Bit_RESET)
-     {
-       STM_EVAL_LEDOn(LED4);
-     }
-     else
-     {
-       STM_EVAL_LEDOff(LED4);
-     }
-      break;
-  default:
-    STM_EVAL_LEDOff(LED1);
-    STM_EVAL_LEDOff(LED2);
-    STM_EVAL_LEDOff(LED3);
-    STM_EVAL_LEDOff(LED4); 
-    break;
-  }
- 
-  SetEPRxStatus(ENDP1, EP_RX_VALID);
+    volatile static bool flag = TRUE;
+    flag = !flag;
+    if(flag)
+       GPIOB->BSRR = GPIO_Pin_5;
+     else 
+       GPIOB->BRR = GPIO_Pin_5;
+     USB_ReceiveFlg = TRUE;//设置接收到数据标志位
+     //将PMA双缓冲区中数据取到用户缓冲区
+ //    PMAToUserBufferCopy(Receive_Buffer, ENDP1_RXADDR,nReportCnt);
+//     MsgCmd = Receive_Buffer[21];
+     //设置端点的接收状态为有效，因为端点接收到数据后会端点状态自动设置成停止状态
+//     SetEPRxStatus(ENDP1, EP_RX_VALID);
  
 }
 
@@ -127,7 +80,7 @@ void EP1_OUT_Callback(void)
 *******************************************************************************/
 void EP1_IN_Callback(void)
 {
-  PrevXferComplete = 1;
+  //PrevXferComplete = 1;
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

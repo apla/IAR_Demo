@@ -35,6 +35,8 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
+ 
+
 #define USB_DEVICE_DESCRIPTOR_TYPE              0x01
 #define USB_CONFIGURATION_DESCRIPTOR_TYPE       0x02
 #define USB_STRING_DESCRIPTOR_TYPE              0x03
@@ -45,15 +47,24 @@
 #define CUSTOMHID_SIZ_HID_DESC                  0x09
 #define CUSTOMHID_OFF_HID_DESC                  0x12
 
+
+
 #define CUSTOMHID_SIZ_DEVICE_DESC               18
 #define CUSTOMHID_SIZ_CONFIG_DESC               41
-#define CUSTOMHID_SIZ_REPORT_DESC               163
-#define CUSTOMHID_SIZ_STRING_LANGID             4
-#define CUSTOMHID_SIZ_STRING_VENDOR             38
-#define CUSTOMHID_SIZ_STRING_PRODUCT            32
-#define CUSTOMHID_SIZ_STRING_SERIAL             26
+#define CUSTOMHID_SIZ_REPORT_DESC               33
+
+//#define CUSTOMHID_SIZ_DEVICE_DESC               32
+//#define CUSTOMHID_SIZ_CONFIG_DESC               153
+//#define CUSTOMHID_SIZ_REPORT_DESC               512
+//#define JOYSTICK_SIZ_REPORT_DESC                74
+//#define CUSTOMHID_SIZ_REPORT_DESC_KBD           1341
+
 
 #define STANDARD_ENDPOINT_DESC_SIZE             0x09
+#define CUSTOMHID_SIZ_STRING_LANGID             4
+#define CUSTOMHID_SIZ_STRING_VENDOR             20
+#define CUSTOMHID_SIZ_STRING_PRODUCT            24
+#define CUSTOMHID_SIZ_STRING_SERIAL             26
 
 /* Exported functions ------------------------------------------------------- */
 extern const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC];

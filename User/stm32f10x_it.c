@@ -23,7 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-
+#include "usb_istr.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -48,6 +48,39 @@ void NMI_Handler(void)
 {
 }
 
+void USB_LP_CAN1_RX0_IRQHandler(void)//start.s
+{
+    static u8 flag = 0;
+    USB_Istr();
+    GPIOB->BRR = GPIO_Pin_5;
+//    flag = ~flag;
+//    if(flag){
+//      GPIOB->BSRR = GPIO_Pin_5;
+//      delay_ms(500);
+//    }else{
+//      GPIOB->BRR = GPIO_Pin_5;
+//      delay_ms(500);
+//    }
+}
+
+void TIM2_IRQHandler(void)  // 1s enter
+{
+#if 0
+     static BOOL flag = FALSE;
+     if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+     {
+       flag = ~flag;
+
+     if(flag)
+         GPIOB->BSRR = GPIO_Pin_5;
+       else 
+         GPIOB->BRR = GPIO_Pin_5;   
+        if (TimeCount<0xff) TimeCount++;
+      //   USB_SendString("Hi,PC! I'm STM32-ARM");
+        TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );	
+     }  
+#endif
+}
 /**
   * @brief  This function handles Hard Fault exception.
   * @param  None

@@ -43,7 +43,7 @@
 uint32_t ProtocolValue;
 __IO uint8_t EXTI_Enable;
 __IO uint8_t Request = 0;
-uint8_t Report_Buf[2];   
+uint8_t Report_Buf[64];   
 /* -------------------------------------------------------------------------- */
 /*  Structures initializations */
 /* -------------------------------------------------------------------------- */
@@ -139,10 +139,15 @@ void CustomHID_init(void)
   pInformation->Current_Configuration = 0;
   /* Connect the device */
   PowerOn();
-
+#if 1
+ /* USB interrupts initialization */
+     _SetISTR(0);               /* clear pending interrupts */
+     wInterrupt_Mask = IMR_MSK;
+    _SetCNTR(wInterrupt_Mask); /* set interrupts mask */
   /* Perform basic device initialization operations */
-  USB_SIL_Init();
-
+#else    
+    USB_SIL_Init();
+#endif
   bDeviceState = UNCONNECTED;
 }
 
@@ -163,7 +168,30 @@ void CustomHID_Reset(void)
   pInformation->Current_Feature = CustomHID_ConfigDescriptor[7];
  
   SetBTABLE(BTABLE_ADDRESS);
+#if 1
+  /* Initialize Endpoint 0 */
+     SetEPType(ENDP0, EP_CONTROL);
+     SetEPTxStatus(ENDP0, EP_TX_STALL);
+     SetEPRxAddr(ENDP0, ENDP0_RXADDR);
+     SetEPTxAddr(ENDP0, ENDP0_TXADDR);
+     Clear_Status_Out(ENDP0);
+     SetEPRxCount(ENDP0, Device_Property.MaxPacketSize);
+     SetEPRxValid(ENDP0);
 
+  /* Initialize Endpoint 1 */
+     SetEPType(ENDP1, EP_INTERRUPT);
+     SetEPRxAddr(ENDP1, ENDP1_RXADDR);
+     SetEPRxCount(ENDP1, 64);
+     SetEPRxStatus(ENDP1, EP_RX_VALID);
+     //SetEPTxStatus(ENDP1, EP_TX_DIS);
+
+  /* Initialize Endpoint 2 */
+     SetEPType(ENDP2, EP_INTERRUPT);
+     SetEPTxAddr(ENDP2, ENDP2_TXADDR);
+     SetEPTxCount(ENDP2, 64);
+    // SetEPTxStatus(ENDP2, EP_TX_DIS);
+     SetEPTxStatus(ENDP2, EP_TX_NAK);
+#else
   /* Initialize Endpoint 0 */
   SetEPType(ENDP0, EP_CONTROL);
   SetEPTxStatus(ENDP0, EP_TX_STALL);
@@ -177,11 +205,11 @@ void CustomHID_Reset(void)
   SetEPType(ENDP1, EP_INTERRUPT);
   SetEPTxAddr(ENDP1, ENDP1_TXADDR);
   SetEPRxAddr(ENDP1, ENDP1_RXADDR);
-  SetEPTxCount(ENDP1, 2);
-  SetEPRxCount(ENDP1, 2);
+  SetEPTxCount(ENDP1, 64);
+  SetEPRxCount(ENDP1, 64);
   SetEPRxStatus(ENDP1, EP_RX_VALID);
   SetEPTxStatus(ENDP1, EP_TX_NAK);
-
+#endif
   /* Set this device to response on default address */
   SetDeviceAddress(0);
   bDeviceState = ATTACHED;
@@ -199,16 +227,8 @@ void CustomHID_SetConfiguration(void)
   if (pInformation->Current_Configuration != 0)
   {
     /* Device configured */
-    bDeviceState = CONFIGURED;
-    
-    /* Start ADC Software Conversion */ 
-#if defined(STM32L1XX_MD) || defined(STM32L1XX_HD)|| defined(STM32L1XX_MD_PLUS)|| defined(STM32F37X)
-    ADC_SoftwareStartConv(ADC1);
-#elif defined (STM32F30X)
-    ADC_StartConversion(ADC1);
-#else
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
-#endif /* STM32L1XX_XD */
+    bDeviceState = CONFIGURED;  
+ 
   }
 }
 /*******************************************************************************
@@ -230,69 +250,8 @@ void CustomHID_SetDeviceAddress (void)
 * Return         : None.
 *******************************************************************************/
 void CustomHID_Status_In(void)
-{  
-  BitAction Led_State;
+{ 
   
-  if (Report_Buf[1] == 0)
-  {
-    Led_State = Bit_RESET;
-  }
-  else 
-  {
-    Led_State = Bit_SET;
-  }
-  
-  switch (Report_Buf[0])  
-  {
-    /*Change LED's status according to the host report*/
-    
-  case 1: /* Led 1 */ 
-    if (Led_State != Bit_RESET)
-    {
-      STM_EVAL_LEDOn(LED1);
-    }
-    else
-    {
-      STM_EVAL_LEDOff(LED1);
-    }
-    break;
-  case 2:   /* Led 2 */    
-    if (Led_State != Bit_RESET)
-    {
-      STM_EVAL_LEDOn(LED2);
-    }
-    else
-    {
-      STM_EVAL_LEDOff(LED2);
-    }
-    break;
-  case 3:/* Led 3 */    
-    if (Led_State != Bit_RESET)
-    {
-      STM_EVAL_LEDOn(LED3);
-    }
-    else
-    {
-      STM_EVAL_LEDOff(LED3);
-    }
-    break;
-  case 4:/* Led 4 */    
-    if (Led_State != Bit_RESET)
-    {
-      STM_EVAL_LEDOn(LED4);
-    }
-    else
-    {
-      STM_EVAL_LEDOff(LED4);
-    }
-    break;
-  default:
-    STM_EVAL_LEDOff(LED1);
-    STM_EVAL_LEDOff(LED2);
-    STM_EVAL_LEDOff(LED3);
-    STM_EVAL_LEDOff(LED4); 
-    break;
-  }
 }
 
 /*******************************************************************************
@@ -315,18 +274,15 @@ void CustomHID_Status_Out (void)
 *******************************************************************************/
 RESULT CustomHID_Data_Setup(uint8_t RequestNo)
 {
-  uint8_t *(*CopyRoutine)(uint16_t);
-  
-  if (pInformation->USBwIndex != 0) 
-    return USB_UNSUPPORT;    
-  
+  u8 *(*CopyRoutine)(u16);
+
   CopyRoutine = NULL;
-  
+
   if ((RequestNo == GET_DESCRIPTOR)
       && (Type_Recipient == (STANDARD_REQUEST | INTERFACE_RECIPIENT))
-        )
+      && (pInformation->USBwIndex0 == 0))
   {
-    
+
     if (pInformation->USBwValue1 == REPORT_DESCRIPTOR)
     {
       CopyRoutine = CustomHID_GetReportDescriptor;
@@ -335,31 +291,21 @@ RESULT CustomHID_Data_Setup(uint8_t RequestNo)
     {
       CopyRoutine = CustomHID_GetHIDDescriptor;
     }
-    
+
   } /* End of GET_DESCRIPTOR */
-  
-  /*** GET_PROTOCOL, GET_REPORT, SET_REPORT ***/
-  else if ( (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) )
-  {         
-    switch( RequestNo )
-    {
-    case GET_PROTOCOL:
-      CopyRoutine = CustomHID_GetProtocolValue;
-      break;
-    case SET_REPORT:
-      CopyRoutine = CustomHID_SetReport_Feature;
-      Request = SET_REPORT;
-      break;
-    default:
-      break;
-    }
+
+  /*** GET_PROTOCOL ***/
+  else if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT))
+           && RequestNo == GET_PROTOCOL)
+  {
+    CopyRoutine = CustomHID_GetProtocolValue;
   }
-  
+
   if (CopyRoutine == NULL)
   {
     return USB_UNSUPPORT;
   }
-  
+
   pInformation->Ctrl_Info.CopyData = CopyRoutine;
   pInformation->Ctrl_Info.Usb_wOffset = 0;
   (*CopyRoutine)(0);

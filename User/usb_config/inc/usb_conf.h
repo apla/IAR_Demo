@@ -40,7 +40,27 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define EP_NUM     (2)
+//#define EP_NUM     (2)
+//
+///*-------------------------------------------------------------*/
+///* --------------   Buffer Description Table  -----------------*/
+///*-------------------------------------------------------------*/
+///* buffer table base address */
+///* buffer table base address */
+//#define BTABLE_ADDRESS      (0x00)
+//
+///* EP0  */
+///* rx/tx buffer base address */
+//#define ENDP0_RXADDR        (0x18)
+//#define ENDP0_TXADDR        (0x58)
+//
+///* EP1  */
+///* tx buffer base address */
+//#define ENDP1_TXADDR        (0x100)
+//#define ENDP1_RXADDR        (0x104)
+
+#if 1
+#define EP_NUM     (3)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
@@ -56,9 +76,37 @@
 
 /* EP1  */
 /* tx buffer base address */
-#define ENDP1_TXADDR        (0x100)
-#define ENDP1_RXADDR        (0x104)
+//地址为32位对其,位4的倍数，不能超过 bMaxPacketSize
 
+#define ENDP1_RXADDR        (0x98)
+#define ENDP1_TXADDR        (0xD8)
+//EP2
+//#define ENDP2_RXADDR        (0x118)
+#define ENDP2_TXADDR        (0x118)
+
+#else
+#define EP_NUM     (4)
+#define BTABLE_ADDRESS      (0x00)
+/* config the endpoint address for 4 EPs */
+/* EP0  */
+/* rx/tx buffer base address */
+#define ENDP0_RXADDR        (0x58)
+#define ENDP0_TXADDR        (ENDP0_RXADDR+0x40)
+
+/* EP1  */
+/* rx/tx buffer base address */
+#define ENDP1_TXADDR        (ENDP0_TXADDR+0x40)
+//#define ENDP1_RXADDR        (ENDP1_TXADDR+0x10)
+
+/*EP2 */
+/* rx/tx buffer base address */
+#define ENDP2_TXADDR        (ENDP1_TXADDR+0x40)
+//#define ENDP2_RXADDR        (ENDP2_TXADDR+0x10)
+
+/*EP3 */
+/* rx/tx buffer base address */
+#define ENDP3_TXADDR        (ENDP2_TXADDR+0x40)
+#endif
 /*-------------------------------------------------------------*/
 /* -------------------   ISTR events  -------------------------*/
 /*-------------------------------------------------------------*/

@@ -40,7 +40,7 @@
 #include "usb_sil.h"
 #include "usb_mem.h"
 #include "usb_int.h"
-
+#define  nReportCnt 64
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

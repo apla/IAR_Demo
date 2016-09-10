@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-160909511
+Checksum=755941662
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -36,17 +36,6 @@ ITMportsLogFile=0
 ITMlogFile=$PROJ_DIR$\ITM.log
 [JLinkDriver]
 CStepIntDis=_ 0
-[Interrupts]
-Enabled=1
-[MemConfig]
-Base=1
-Manual=0
-Ddf=1
-TypeViol=0
-Stop=1
-[Simulator]
-Freq=10000000
-MultiCoreRunAll=1
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0
@@ -65,12 +54,6 @@ Title_0=I0
 Symbol_0=0 4 1
 LiveEnabled=0
 LiveFile=PowerLogLive.log
-[DataLog]
-LogEnabled=0
-SumEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=1
 [EventLog]
 LogEnabled=0
 SumEnabled=0
@@ -78,6 +61,10 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
+[PowerProbe]
+Frequency=10000
+Probe0=I0
+ProbeSetup0=2 1 1 2 0 0
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -85,6 +72,29 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
+[DataLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Count=0
+[Interrupts]
+Enabled=1
+[MemConfig]
+Base=1
+Manual=0
+Ddf=1
+TypeViol=0
+Stop=1
+[Trace1]
+Enabled=0
+ShowSource=1
+[CallStackLog]
+Enabled=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -92,23 +102,15 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[CallStackLog]
-Enabled=0
-[PowerProbe]
-Frequency=10000
-Probe0=I0
-ProbeSetup0=2 1 1 2 0 0
-[DriverProfiling]
-Enabled=0
-Mode=3
-Graph=0
-Symbiont=0
-Exclusions=
-[Disassemble mode]
-mode=0
-[Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\FWlib\src\stm32f10x_tim.c}.235.3" 0 0 1 "" 0 "" 0
-Count=1
 [Aliases]
 Count=0
 SuppressDialog=0
+[Simulator]
+Freq=10000000
+MultiCoreRunAll=1
+[DriverProfiling]
+Enabled=0
+Mode=1
+Graph=0
+Symbiont=0
+Exclusions=

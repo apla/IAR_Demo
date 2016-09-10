@@ -48,7 +48,7 @@
  #elif defined (USE_STM3210E_EVAL)
   #include "stm3210e_eval.h"
  #else
-  #error "Missing define: USE_STM3210B_EVAL or USE_STM3210E_EVAL"
+//  #error "Missing define: USE_STM3210B_EVAL or USE_STM3210E_EVAL"
  #endif /* USE_STM3210B_EVAL */
 #elif defined (USE_STM32373C_EVAL)
  #include "stm32f37x.h"
@@ -173,33 +173,14 @@
   #define GPIO_IOAIN_PIN                      GPIO_Pin_10   /* PF.10 */
   #define ADC_AIN_CHANNEL                     ADC_Channel_31
 
-#elif defined (USE_STM32373C_EVAL)
+ 
   
-  #define ADC1_DR_Address                     0x4001244C
-
-  #define RCC_AHBPeriph_GPIO_IOAIN            RCC_AHBPeriph_GPIOB
-  #define GPIO_IOAIN                          GPIOB
-  #define GPIO_IOAIN_PIN                      GPIO_Pin_1   /* PB.1 */
-  #define ADC_AIN_CHANNEL                     ADC_Channel_9
-  #define GPIO_Mode_AIN                       GPIO_Mode_AN
-
-#elif defined (USE_STM32303C_EVAL)
-  
-  #define ADC1_DR_Address                      0x5000030C
-
-  #define RCC_AHBPeriph_GPIO_IOAIN            RCC_AHBPeriph_GPIOC
-  #define GPIO_IOAIN                          GPIOC
-  #define GPIO_IOAIN_PIN                      GPIO_Pin_1   /* PC.1 */
-  #define ADC_AIN_CHANNEL                     ADC_Channel_7
-  #define GPIO_Mode_AIN                       GPIO_Mode_AN
-
-#else
-  #define RCC_APB2Periph_GPIO_IOAIN           RCC_APB2Periph_GPIOC
-  #define GPIO_IOAIN                          GPIOC
-  #define GPIO_IOAIN_PIN                      GPIO_Pin_4   /* PC.04 */
-  #define ADC_AIN_CHANNEL                     ADC_Channel_14
 
 #endif /* USE_STM32L152_EVAL */
+
+  #define USB_DISCONNECT                      GPIOB  
+  #define USB_DISCONNECT_PIN                  GPIO_Pin_8
+  #define RCC_APB2Periph_GPIO_DISCONNECT      RCC_APB2Periph_GPIOB
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

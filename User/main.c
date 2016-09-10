@@ -6,10 +6,10 @@
 #include "cpu_init.h"
 #include "i2c1_sensor.h"
 extern u8 USB_ReceiveFlg;
- #define nReportCnt 64
+
 extern u8 Rx_Buffer[nReportCnt];
 extern u8 Tx_Buffer[nReportCnt];
-     void USB_SendString(u8 *str); 
+void USB_SendString(u8 *str); 
 int main(void)
 {  	
   u8 buf[255] = {0};
@@ -32,13 +32,11 @@ int main(void)
   
   //I2C_BufferRead(u8* pBuffer, u8 ReadAddr, u16 NumByteToRead); 
   while(1){
-//        if(USB_ReceiveFlg == TRUE){
-//           USB_SendString("1TRUE==USB_ReceiveFlag");
-//           delay_ms(500);          
-//         }else{
-//           USB_SendString("0FALSE==USB_ReceiveFlag");
-//           delay_ms(500);
-//         }
+        if(USB_ReceiveFlg == TRUE){
+           USB_ReceiveFlg = FALSE;
+           USB_SendString("1TRUE==USB_ReceiveFlag");
+           delay_ms(500);    
+         }
 //      GPIO_ResetBits(GPIOB,GPIO_Pin_5);  
 //      delay_ms(500);  		   
 //      delay_us(1000000);
@@ -51,11 +49,11 @@ int main(void)
 //数据发送: UserToPMABufferCopy--->SetEPTxCount--->SetEPTxValid 
 void USB_SendString(u8 *str)
 {
-     u8 ii=0;
+     u8 i=0;
      while(*str)
      {
-         Tx_Buffer[ii++]=*(str++);
-         if (ii == nReportCnt) break;
+         Tx_Buffer[i++]=*(str++);
+         if (i == nReportCnt) break;
      }
      //拷贝数据到PMA中
      UserToPMABufferCopy(Tx_Buffer, ENDP2_TXADDR, nReportCnt);

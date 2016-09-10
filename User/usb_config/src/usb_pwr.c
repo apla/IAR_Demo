@@ -1,32 +1,20 @@
-/**
-  ******************************************************************************
-  * @file    usb_pwr.c
-  * @author  MCD Application Team
-  * @version V4.0.0
-  * @date    21-January-2013
-  * @brief   Connection/disconnection & power management
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+* File Name          : usb_pwr.c
+* Author             : MCD Application Team
+* Version            : V2.2.1
+* Date               : 09/22/2008
+* Description        : Connection/disconnection & power management
+********************************************************************************
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
 #include "usb_lib.h"
 #include "usb_conf.h"
 #include "usb_pwr.h"
@@ -36,18 +24,14 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-__IO uint32_t bDeviceState = UNCONNECTED; /* USB device status */
-__IO bool fSuspendEnabled = TRUE;  /* true when suspend is possible */
-__IO uint32_t EP[8];
+vu32 bDeviceState = UNCONNECTED; /* USB device status */
+volatile bool fSuspendEnabled = TRUE;  /* true when suspend is possible */
 
 struct
 {
-  __IO RESUME_STATE eState;
-  __IO uint8_t bESOFcnt;
-}
-ResumeS;
-
-__IO uint32_t remotewakeupon=0;
+  volatile RESUME_STATE eState;
+  volatile u8 bESOFcnt;
+}ResumeS;
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -63,12 +47,12 @@ __IO uint32_t remotewakeupon=0;
 *******************************************************************************/
 RESULT PowerOn(void)
 {
-  uint16_t wRegVal;
+  u16 wRegVal;
 
   /*** cable plugged-in ? ***/
-  USB_Cable_Config(ENABLE);
+  USB_Cable_Config(ENABLE1);
 
-  /*** CNTR_PWDN = 0 ***/
+  /*** CNTR_PWDN = 0 ***/ //USB 收发器内部参照电压
   wRegVal = CNTR_FRES;
   _SetCNTR(wRegVal);
 
@@ -80,7 +64,7 @@ RESULT PowerOn(void)
   /*** Set interrupt mask ***/
   wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM;
   _SetCNTR(wInterrupt_Mask);
-  
+
   return USB_SUCCESS;
 }
 
@@ -93,12 +77,12 @@ RESULT PowerOn(void)
 *******************************************************************************/
 RESULT PowerOff()
 {
-  /* disable all interrupts and force USB reset */
+  /* disable all ints and force USB reset */
   _SetCNTR(CNTR_FRES);
   /* clear interrupt status register */
   _SetISTR(0);
   /* Disable the Pull-Up*/
-  USB_Cable_Config(DISABLE);
+  USB_Cable_Config(DISABLE1);
   /* switch-off device */
   _SetCNTR(CNTR_FRES + CNTR_PDWN);
   /* sw variables reset */
@@ -116,7 +100,7 @@ RESULT PowerOff()
 *******************************************************************************/
 void Suspend(void)
 {
-	u16 wCNTR;
+  u16 wCNTR;
   /* suspend preparation */
   /* ... */
 
@@ -138,6 +122,7 @@ void Suspend(void)
   /* switch-off the clocks */
   /* ... */
   Enter_LowPowerMode();
+
 }
 
 /*******************************************************************************
@@ -149,8 +134,8 @@ void Suspend(void)
 *******************************************************************************/
 void Resume_Init(void)
 {
-  uint16_t wCNTR;
-  
+  u16 wCNTR;
+
   /* ------------------ ONLY WITH BUS-POWERED DEVICES ---------------------- */
   /* restart the clocks */
   /* ...  */
@@ -158,8 +143,8 @@ void Resume_Init(void)
   /* CNTR_LPMODE = 0 */
   wCNTR = _GetCNTR();
   wCNTR &= (~CNTR_LPMODE);
-  _SetCNTR(wCNTR);    
-  
+  _SetCNTR(wCNTR);
+
   /* restore full power */
   /* ... on connected devices */
   Leave_LowPowerMode();
@@ -168,7 +153,7 @@ void Resume_Init(void)
   _SetCNTR(IMR_MSK);
 
   /* reverse suspend preparation */
-  /* ... */ 
+  /* ... */
 
 }
 
@@ -235,4 +220,4 @@ void Resume(RESUME_STATE eResumeSetVal)
   }
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

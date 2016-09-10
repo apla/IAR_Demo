@@ -1,30 +1,17 @@
-/**
-  ******************************************************************************
-  * @file    usb_prop.h
-  * @author  MCD Application Team
-  * @version V4.0.0
-  * @date    21-January-2013
-  * @brief   All processing related to Custom HID demo
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+* File Name          : usb_prop.h
+* Author             : MCD Application Team
+* Version            : V2.2.1
+* Date               : 09/22/2008
+* Description        : All processings related to Custom HID demo
+********************************************************************************
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USB_PROP_H
@@ -52,17 +39,17 @@ void CustomHID_SetConfiguration(void);
 void CustomHID_SetDeviceAddress (void);
 void CustomHID_Status_In (void);
 void CustomHID_Status_Out (void);
-RESULT CustomHID_Data_Setup(uint8_t);
-RESULT CustomHID_NoData_Setup(uint8_t);
-RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting);
-uint8_t *CustomHID_GetDeviceDescriptor(uint16_t );
-uint8_t *CustomHID_GetConfigDescriptor(uint16_t);
-uint8_t *CustomHID_GetStringDescriptor(uint16_t);
+RESULT CustomHID_Data_Setup(u8);
+RESULT CustomHID_NoData_Setup(u8);
+RESULT CustomHID_Get_Interface_Setting(u8 Interface, u8 AlternateSetting);
+u8 *CustomHID_GetDeviceDescriptor(u16 );
+u8 *CustomHID_GetConfigDescriptor(u16);
+u8 *CustomHID_GetStringDescriptor(u16);
 RESULT CustomHID_SetProtocol(void);
-uint8_t *CustomHID_GetProtocolValue(uint16_t Length);
+u8 *CustomHID_GetProtocolValue(u16 Length);
 RESULT CustomHID_SetProtocol(void);
-uint8_t *CustomHID_GetReportDescriptor(uint16_t Length);
-uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length);
+u8 *CustomHID_GetReportDescriptor(u16 Length);
+u8 *CustomHID_GetHIDDescriptor(u16 Length);
 
 
 /* Exported define -----------------------------------------------------------*/
@@ -80,4 +67,4 @@ uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length);
 
 #endif /* __USB_PROP_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

@@ -1,49 +1,35 @@
-/**
-  ******************************************************************************
-  * @file    usb_prop.c
-  * @author  MCD Application Team
-  * @version V4.0.0
-  * @date    21-January-2013
-  * @brief   All processings related to Custom HID Demo
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+* File Name          : usb_prop.c
+* Author             : MCD Application Team
+* Version            : V2.2.1
+* Date               : 09/22/2008
+* Description        : All processings related to Custom HID Demo
+********************************************************************************
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
-
-#include "hw_config.h" 
+#include "stm32f10x.h"
 #include "usb_lib.h"
 #include "usb_conf.h"
 #include "usb_prop.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
+#include "hw_config.h"
 
 
-/* Private typedef -----------------------------------------------------------*/ 
+/* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint32_t ProtocolValue;
-__IO uint8_t EXTI_Enable;
-__IO uint8_t Request = 0;
-uint8_t Report_Buf[64];   
+u32 ProtocolValue;
+
+
 /* -------------------------------------------------------------------------- */
 /*  Structures initializations */
 /* -------------------------------------------------------------------------- */
@@ -84,42 +70,38 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
 
 ONE_DESCRIPTOR Device_Descriptor =
   {
-    (uint8_t*)CustomHID_DeviceDescriptor,
+    (u8*)CustomHID_DeviceDescriptor,
     CUSTOMHID_SIZ_DEVICE_DESC
   };
 
 ONE_DESCRIPTOR Config_Descriptor =
   {
-    (uint8_t*)CustomHID_ConfigDescriptor,
+    (u8*)CustomHID_ConfigDescriptor,
     CUSTOMHID_SIZ_CONFIG_DESC
   };
 
 ONE_DESCRIPTOR CustomHID_Report_Descriptor =
   {
-    (uint8_t *)CustomHID_ReportDescriptor,
+    (u8 *)CustomHID_ReportDescriptor,
     CUSTOMHID_SIZ_REPORT_DESC
   };
 
 ONE_DESCRIPTOR CustomHID_Hid_Descriptor =
   {
-    (uint8_t*)CustomHID_ConfigDescriptor + CUSTOMHID_OFF_HID_DESC,
+    (u8*)CustomHID_ConfigDescriptor + CUSTOMHID_OFF_HID_DESC,
     CUSTOMHID_SIZ_HID_DESC
   };
 
 ONE_DESCRIPTOR String_Descriptor[4] =
   {
-    {(uint8_t*)CustomHID_StringLangID, CUSTOMHID_SIZ_STRING_LANGID},
-    {(uint8_t*)CustomHID_StringVendor, CUSTOMHID_SIZ_STRING_VENDOR},
-    {(uint8_t*)CustomHID_StringProduct, CUSTOMHID_SIZ_STRING_PRODUCT},
-    {(uint8_t*)CustomHID_StringSerial, CUSTOMHID_SIZ_STRING_SERIAL}
+    {(u8*)CustomHID_StringLangID, CUSTOMHID_SIZ_STRING_LANGID},
+    {(u8*)CustomHID_StringVendor, CUSTOMHID_SIZ_STRING_VENDOR},
+    {(u8*)CustomHID_StringProduct, CUSTOMHID_SIZ_STRING_PRODUCT},
+    {(u8*)CustomHID_StringSerial, CUSTOMHID_SIZ_STRING_SERIAL}
   };
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-
-/*CustomHID_SetReport_Feature function prototypes*/
-uint8_t *CustomHID_SetReport_Feature(uint16_t Length);
-
 /* Extern function prototypes ------------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -134,21 +116,17 @@ void CustomHID_init(void)
 {
   /* Update the serial number string descriptor with the data from the unique 
   ID*/
-  Get_SerialNum();
+     Get_SerialNum();
     
-  pInformation->Current_Configuration = 0;
+     pInformation->Current_Configuration = 0;
   /* Connect the device */
-  PowerOn();
-#if 1
- /* USB interrupts initialization */
+     PowerOn();
+  /* USB interrupts initialization */
      _SetISTR(0);               /* clear pending interrupts */
      wInterrupt_Mask = IMR_MSK;
     _SetCNTR(wInterrupt_Mask); /* set interrupts mask */
-  /* Perform basic device initialization operations */
-#else    
-    USB_SIL_Init();
-#endif
-  bDeviceState = UNCONNECTED;
+
+     bDeviceState = UNCONNECTED;
 }
 
 /*******************************************************************************
@@ -160,14 +138,14 @@ void CustomHID_init(void)
 *******************************************************************************/
 void CustomHID_Reset(void)
 {
-  /* Set CustomHID_DEVICE as not configured */
-  pInformation->Current_Configuration = 0;
-  pInformation->Current_Interface = 0;/*the default Interface*/
+  /* Set Joystick_DEVICE as not configured */
+     pInformation->Current_Configuration = 0;
+     pInformation->Current_Interface = 0;  /*the default Interface*/
   
   /* Current Feature initialization */
-  pInformation->Current_Feature = CustomHID_ConfigDescriptor[7];
- 
-  SetBTABLE(BTABLE_ADDRESS);
+     pInformation->Current_Feature = CustomHID_ConfigDescriptor[7];
+  
+     SetBTABLE(BTABLE_ADDRESS);
 #if 1
   /* Initialize Endpoint 0 */
      SetEPType(ENDP0, EP_CONTROL);
@@ -181,17 +159,18 @@ void CustomHID_Reset(void)
   /* Initialize Endpoint 1 */
      SetEPType(ENDP1, EP_INTERRUPT);
      SetEPRxAddr(ENDP1, ENDP1_RXADDR);
-     SetEPRxCount(ENDP1, 64);
+     SetEPRxCount(ENDP1, nReportCnt);
      SetEPRxStatus(ENDP1, EP_RX_VALID);
      //SetEPTxStatus(ENDP1, EP_TX_DIS);
 
   /* Initialize Endpoint 2 */
      SetEPType(ENDP2, EP_INTERRUPT);
      SetEPTxAddr(ENDP2, ENDP2_TXADDR);
-     SetEPTxCount(ENDP2, 64);
+     SetEPTxCount(ENDP2, nReportCnt);
     // SetEPTxStatus(ENDP2, EP_TX_DIS);
      SetEPTxStatus(ENDP2, EP_TX_NAK);
 #else
+     
   /* Initialize Endpoint 0 */
   SetEPType(ENDP0, EP_CONTROL);
   SetEPTxStatus(ENDP0, EP_TX_STALL);
@@ -204,19 +183,35 @@ void CustomHID_Reset(void)
   /* Initialize Endpoint 1 */
   SetEPType(ENDP1, EP_INTERRUPT);
   SetEPTxAddr(ENDP1, ENDP1_TXADDR);
-  SetEPRxAddr(ENDP1, ENDP1_RXADDR);
   SetEPTxCount(ENDP1, 64);
-  SetEPRxCount(ENDP1, 64);
-  SetEPRxStatus(ENDP1, EP_RX_VALID);
+  SetEPRxStatus(ENDP1, EP_RX_DIS);
   SetEPTxStatus(ENDP1, EP_TX_NAK);
-#endif
+
+  /* Initialize Endpoint 2 */
+  SetEPType(ENDP2, EP_INTERRUPT);
+  SetEPTxAddr(ENDP2, ENDP2_TXADDR);
+  SetEPTxCount(ENDP2, 64);
+  SetEPRxStatus(ENDP2, EP_RX_DIS);  
+  SetEPTxStatus(ENDP2, EP_TX_NAK);
+
+  /* Initialize Endpoint 3 */
+  SetEPType(ENDP3, EP_INTERRUPT);
+  SetEPTxAddr(ENDP3, ENDP3_TXADDR);
+  SetEPTxCount(ENDP3, 64);
+  SetEPRxStatus(ENDP3, EP_RX_DIS);
+  SetEPTxStatus(ENDP3, EP_TX_NAK);  
+  
   /* Set this device to response on default address */
   SetDeviceAddress(0);
-  bDeviceState = ATTACHED;
+#endif
+     bDeviceState = ATTACHED;
+  
+  /* Set this device to response on default address */
+     SetDeviceAddress(0);
 }
 /*******************************************************************************
 * Function Name  : CustomHID_SetConfiguration.
-* Description    : Update the device state to configured and command the ADC 
+* Description    : Udpade the device state to configured and command the ADC 
 *                  conversion.
 * Input          : None.
 * Output         : None.
@@ -227,13 +222,17 @@ void CustomHID_SetConfiguration(void)
   if (pInformation->Current_Configuration != 0)
   {
     /* Device configured */
-    bDeviceState = CONFIGURED;  
- 
+    bDeviceState = CONFIGURED;
+    
+    /* Start ADC1 Software Conversion */ 
+
+//    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+
   }
 }
 /*******************************************************************************
 * Function Name  : CustomHID_SetConfiguration.
-* Description    : Update the device state to addressed.
+* Description    : Udpade the device state to addressed.
 * Input          : None.
 * Output         : None.
 * Return         : None.
@@ -250,8 +249,7 @@ void CustomHID_SetDeviceAddress (void)
 * Return         : None.
 *******************************************************************************/
 void CustomHID_Status_In(void)
-{ 
-  
+{
 }
 
 /*******************************************************************************
@@ -272,7 +270,7 @@ void CustomHID_Status_Out (void)
 * Output         : None.
 * Return         : USB_UNSUPPORT or USB_SUCCESS.
 *******************************************************************************/
-RESULT CustomHID_Data_Setup(uint8_t RequestNo)
+RESULT CustomHID_Data_Setup(u8 RequestNo)
 {
   u8 *(*CopyRoutine)(u16);
 
@@ -313,33 +311,13 @@ RESULT CustomHID_Data_Setup(uint8_t RequestNo)
 }
 
 /*******************************************************************************
-* Function Name  : CustomHID_SetReport_Feature
-* Description    : Set Feature request handling
-* Input          : Length.
-* Output         : None.
-* Return         : Buffer
-*******************************************************************************/
-uint8_t *CustomHID_SetReport_Feature(uint16_t Length)
-{
-  if (Length == 0)
-  {
-    pInformation->Ctrl_Info.Usb_wLength = 2;
-    return NULL;
-  }
-  else
-  {
-    return Report_Buf;
-  }
-}
-
-/*******************************************************************************
 * Function Name  : CustomHID_NoData_Setup
 * Description    : handle the no data class specific requests
 * Input          : Request Nb.
 * Output         : None.
 * Return         : USB_UNSUPPORT or USB_SUCCESS.
 *******************************************************************************/
-RESULT CustomHID_NoData_Setup(uint8_t RequestNo)
+RESULT CustomHID_NoData_Setup(u8 RequestNo)
 {
   if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT))
       && (RequestNo == SET_PROTOCOL))
@@ -360,7 +338,7 @@ RESULT CustomHID_NoData_Setup(uint8_t RequestNo)
 * Output         : None.
 * Return         : The address of the device descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetDeviceDescriptor(uint16_t Length)
+u8 *CustomHID_GetDeviceDescriptor(u16 Length)
 {
   return Standard_GetDescriptorData(Length, &Device_Descriptor);
 }
@@ -372,7 +350,7 @@ uint8_t *CustomHID_GetDeviceDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : The address of the configuration descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetConfigDescriptor(uint16_t Length)
+u8 *CustomHID_GetConfigDescriptor(u16 Length)
 {
   return Standard_GetDescriptorData(Length, &Config_Descriptor);
 }
@@ -384,9 +362,9 @@ uint8_t *CustomHID_GetConfigDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : The address of the string descriptors.
 *******************************************************************************/
-uint8_t *CustomHID_GetStringDescriptor(uint16_t Length)
+u8 *CustomHID_GetStringDescriptor(u16 Length)
 {
-  uint8_t wValue0 = pInformation->USBwValue0;
+  u8 wValue0 = pInformation->USBwValue0;
   if (wValue0 > 4)
   {
     return NULL;
@@ -404,7 +382,7 @@ uint8_t *CustomHID_GetStringDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : The address of the configuration descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetReportDescriptor(uint16_t Length)
+u8 *CustomHID_GetReportDescriptor(u16 Length)
 {
   return Standard_GetDescriptorData(Length, &CustomHID_Report_Descriptor);
 }
@@ -416,7 +394,7 @@ uint8_t *CustomHID_GetReportDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : The address of the configuration descriptor.
 *******************************************************************************/
-uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length)
+u8 *CustomHID_GetHIDDescriptor(u16 Length)
 {
   return Standard_GetDescriptorData(Length, &CustomHID_Hid_Descriptor);
 }
@@ -430,7 +408,7 @@ uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : USB_SUCCESS or USB_UNSUPPORT.
 *******************************************************************************/
-RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
+RESULT CustomHID_Get_Interface_Setting(u8 Interface, u8 AlternateSetting)
 {
   if (AlternateSetting > 0)
   {
@@ -452,7 +430,7 @@ RESULT CustomHID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetti
 *******************************************************************************/
 RESULT CustomHID_SetProtocol(void)
 {
-  uint8_t wValue0 = pInformation->USBwValue0;
+  u8 wValue0 = pInformation->USBwValue0;
   ProtocolValue = wValue0;
   return USB_SUCCESS;
 }
@@ -462,9 +440,9 @@ RESULT CustomHID_SetProtocol(void)
 * Description    : get the protocol value
 * Input          : Length.
 * Output         : None.
-* Return         : address of the protocol value.
+* Return         : address of the protcol value.
 *******************************************************************************/
-uint8_t *CustomHID_GetProtocolValue(uint16_t Length)
+u8 *CustomHID_GetProtocolValue(u16 Length)
 {
   if (Length == 0)
   {
@@ -473,8 +451,8 @@ uint8_t *CustomHID_GetProtocolValue(uint16_t Length)
   }
   else
   {
-    return (uint8_t *)(&ProtocolValue);
+    return (u8 *)(&ProtocolValue);
   }
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

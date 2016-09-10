@@ -1,45 +1,24 @@
-/**
-  ******************************************************************************
-  * @file    usb_desc.c
-  * @author  MCD Application Team
-  * @version V4.0.0
-  * @date    21-January-2013
-  * @brief   Descriptors for Custom HID Demo
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+* File Name          : usb_desc.c
+* Author             : MCD Application Team
+* Version            : V2.2.1
+* Date               : 09/22/2008
+* Description        : Descriptors for Custom HID Demo
+********************************************************************************
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
 #include "usb_lib.h"
 #include "usb_desc.h"
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Extern variables ----------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-
 /* USB Standard Device Descriptor */
-const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
+const u8 CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
   {
     0x12,                       /*bLength = 18byte(fixed)*/
     USB_DEVICE_DESCRIPTOR_TYPE, /*bDescriptorType (fixed:0x01)*/
@@ -66,11 +45,11 @@ const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
   ; /* CustomHID_DeviceDescriptor */
 
 
-/* USB Configuration Descriptor */
+/* USB Configuration Descriptor mutiple_num*/
 /*   All Descriptors (Configuration, Interface, Endpoint, Class, Vendor */
-const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
+const u8 CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
   {
-   0x09, /* bLength: Configuation Descriptor size ≈‰÷√√Ë ˆ∑˚*/
+    0x09, /* bLength: Configuation Descriptor size ≈‰÷√√Ë ˆ∑˚*/
     USB_CONFIGURATION_DESCRIPTOR_TYPE, /* bDescriptorType: Configuration */
     CUSTOMHID_SIZ_CONFIG_DESC,
     /* wTotalLength: Bytes returned */
@@ -132,9 +111,9 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     /* 41 */
   }
   ; /* CustomHID_ConfigDescriptor */
-const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
-  {                    
-    0x05, 0x8c, /* USAGE_PAGE (ST Page) */
+const u8 CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] = //modify here if1 ok
+{
+        0x05, 0x8c, /* USAGE_PAGE (ST Page) */
         0x09, 0x01, /* USAGE (Demo Kit) */
         0xa1, 0x01, /* COLLECTION (Application) */
          
@@ -155,10 +134,12 @@ const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
         0x91,0x02, // OUTPUT (Data,Var,Abs) 
  
         0xc0 /* END_COLLECTION */
-  }; /* CustomHID_ReportDescriptor */
+
+}; /* CustomHID_ReportDescriptor */ 
+
 
 /* USB String Descriptors (optional) */
-const uint8_t CustomHID_StringLangID[CUSTOMHID_SIZ_STRING_LANGID] =
+const u8 CustomHID_StringLangID[CUSTOMHID_SIZ_STRING_LANGID] =
   {
     CUSTOMHID_SIZ_STRING_LANGID,
     USB_STRING_DESCRIPTOR_TYPE,
@@ -167,7 +148,7 @@ const uint8_t CustomHID_StringLangID[CUSTOMHID_SIZ_STRING_LANGID] =
   }
   ; /* LangID = 0x0409: U.S. English */
 
-const uint8_t CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
+const u8 CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
   {
     CUSTOMHID_SIZ_STRING_VENDOR, /* Size of Vendor string */
     USB_STRING_DESCRIPTOR_TYPE,  /* bDescriptorType*/
@@ -175,20 +156,20 @@ const uint8_t CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
      'I',0,'d',0,'e',0,'a',0,'l',0,'s',0,'e',0,'e',0
   };
 
-const uint8_t CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
+const u8 CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
   {
-   CUSTOMHID_SIZ_STRING_PRODUCT,          /* bLength */
+    CUSTOMHID_SIZ_STRING_PRODUCT,          /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
     //Product Name: IDEALENS k2
     'I', 0, 'D', 0, 'E', 0, 'A', 0,'L', 0, 'E',0,'N',0,'S',0,'_',0,'k',0,'2',0
   };
-uint8_t CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
+u8 CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
   {
-     CUSTOMHID_SIZ_STRING_SERIAL,           /* bLength */
+    CUSTOMHID_SIZ_STRING_SERIAL,           /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
     //≤˙∆∑–Ú¡–∫≈
     'M', 0, '1', 0, '0', 0, '0', 0, '0', 0,'V', 0, '0', 0, '1', 0
   };
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
 

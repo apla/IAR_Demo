@@ -1,79 +1,244 @@
-/**
-  ******************************************************************************
-  * @file    hw_config.c
-  * @author  MCD Application Team
-  * @version V4.0.0
-  * @date    21-January-2013
-  * @brief   Hardware Configuration & Setup
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+* File Name          : hw_config.c
+* Author             : MCD Application Team
+* Version            : V2.2.1
+* Date               : 09/22/2008
+* Description        : Hardware Configuration & Setup
+********************************************************************************
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
+#include "stm32f10x_tim.h"
+#include "platform_config.h"
+//#include "stm32f10x_map.h"
+#include "stm32f10x_bkp.h"
+//#include "stm32f10x_systick.h"
+
+#include "usb_type.h"
+
 #include "hw_config.h"
 #include "usb_lib.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
-
+#include <stdint.h>
+#define BOOL bool
+ErrorStatus HSEStartUpStatus;
+void RTC_Configuration(void);
+void Timer2Configuration(void);
+void RCC_Configuration(void);
+void NVIC_Configuration(void);
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+#define ADC1_DR_Address    ((u32)0x4001244C)
 
-ErrorStatus HSEStartUpStatus;
-uint32_t ADC_ConvertedValueX = 0;
-uint32_t ADC_ConvertedValueX_1 = 0;
-__IO uint16_t  ADC1ConvertedValue = 0, ADC1ConvertedVoltage = 0, calibration_value = 0;
-
-/* Extern variables ----------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-static void IntToUnicode (uint32_t value , uint8_t *pbuf , uint8_t len);
-/* Private functions ---------------------------------------------------------*/
-
-/*******************************************************************************
-* Function Name  : Set_System
-* Description    : Configures Main system clocks & power.
-* Input          : None.
-* Return         : None.
-*******************************************************************************/
 void Set_System(void)
-{  
-
-   NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);   //NVIC_VectTab_RAM
-
-  GPIO_Configuration();
-  
-#if defined(USB_USE_EXTERNAL_PULLUP)
-  /* Enable the USB disconnect GPIO clock */
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIO_DISCONNECT, ENABLE);
-  
-  /* USB_DISCONNECT used as USB pull-up */
-  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);  
-#endif /* USB_USE_EXTERNAL_PULLUP */   
+{ 
+     RCC_Configuration();
+     //NVIC_Configuration();
+//   GPIO_Configuration();
+//   CPU_initializePin( PIN_USB_DP, GPIO_Mode_Out_PP, GPIO_DIR_OUT, GPIO_VALUE_LOW);
+//   CPU_initializePin( PIN_USB_DM, GPIO_Mode_Out_PP, GPIO_DIR_OUT, GPIO_VALUE_LOW);
+//   CPU_initializePin( PIN_USB_DP, GPIO_Mode_IN_FLOATING, 0, 0);
+//   CPU_initializePin( PIN_USB_DM, GPIO_Mode_IN_FLOATING, 0, 0);
+    GPIO_InitTypeDef GPIO_InitStructure;       
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_ResetBits( GPIOA, GPIO_Pin_11 );
+    GPIO_ResetBits( GPIOA, GPIO_Pin_12 );
+    
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+  //  Timer2Configuration();
 }
 
+void LED_Init(void)
+{
+#ifdef stm32f103_eval
+  GPIO_InitTypeDef GPIO_InitStructure;
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);	
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;			 
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  GPIO_SetBits(GPIOC,GPIO_Pin_13);
+#else //our:pb5
+  GPIO_InitTypeDef GPIO_InitStructure;
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;			 
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+ // GPIOB->BSRR = GPIO_Pin_5;
+  GPIO_SetBits(GPIOB,GPIO_Pin_5);
+#endif  
+}
+#ifdef stm32f103_eval //开发板8M osc
+void RCC_Configuration(void)
+{
+    /* SYSCLK, HCLK, PCLK2 and PCLK1 configuration -----------------------------*/   
+     
+  /* RCC system reset(for debug purpose) */
+	RCC_DeInit();
+
+  /* Enable HSE */
+	RCC_HSEConfig(RCC_HSE_ON);
+
+  /* Wait till HSE is ready */
+	HSEStartUpStatus = RCC_WaitForHSEStartUp();
+
+	if(HSEStartUpStatus == SUCCESS)
+	{
+    /* Enable Prefetch Buffer */
+		FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+
+    /* Flash 2 wait state */
+		FLASH_SetLatency(FLASH_Latency_2);
+ 
+    /* HCLK = SYSCLK */
+		RCC_HCLKConfig(RCC_SYSCLK_Div1); 
+  
+    /* PCLK2 = HCLK */
+		RCC_PCLK2Config(RCC_HCLK_Div1); 
+
+    /* PCLK1 = HCLK/2 */
+		RCC_PCLK1Config(RCC_HCLK_Div2);  // 36MZH
+
+    /* On STICE the PLL output clock is fixed to 48 MHz */
+		RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
+
+    /* Enable PLL */ 
+		RCC_PLLCmd(ENABLE);
+
+    /* Wait till PLL is ready */
+		while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+		{
+		}
+
+    /* Select PLL as system clock source */
+		RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+
+    /* Wait till PLL is used as system clock source */
+		while(RCC_GetSYSCLKSource() != 0x08)
+		{
+		}
+	}
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP |
+                               RCC_APB1Periph_TIM2, ENABLE);
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIO_DISCONNECT |
+			       RCC_APB2Periph_SPI1 | RCC_APB2Periph_GPIOB, ENABLE); 
+}
+#else
+void RCC_Configuration(void)
+{
+    ErrorStatus HSEStartUpStatus;
+     RCC_ClocksTypeDef RCC_ClocksStatus;  
+    /* RCC system reset(for debug purpose) */
+    RCC_DeInit();
+    
+    /* Enable HSE */
+  RCC_HSEConfig(RCC_HSE_ON);
+    
+    do
+        {
+    /* Wait till HSE is ready */
+    HSEStartUpStatus = RCC_WaitForHSEStartUp();
+        }while(HSEStartUpStatus!= SUCCESS);
+
+    if(HSEStartUpStatus == SUCCESS)
+    {
+        /* HCLK = SYSCLK */
+        RCC_HCLKConfig(RCC_SYSCLK_Div1); 
+     //   RCC_HCLKConfig(RCC_SYSCLK_Div2); //16MHZ /2 = 8MHZ
+        
+        /* PCLK2 = HCLK */
+        RCC_PCLK2Config(RCC_HCLK_Div1); 
+        
+        /* PCLK1 = HCLK/2 */
+        RCC_PCLK1Config(RCC_HCLK_Div2);
+        
+        /* Flash 2 wait state */
+        FLASH_SetLatency(FLASH_Latency_2);
+        
+        /* Enable Prefetch Buffer */
+        FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+      
+        /* PLLCLK = 8MHz * 6 = 48 MHz */
+        RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_6);
+
+        /* Enable PLL */ 
+        RCC_PLLCmd(ENABLE);
+
+        /* Wait till PLL is ready */
+        while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+        {
+        }
+
+        /* Select PLL as system clock source */
+        RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+
+        /* Wait till PLL is used as system clock source */
+        while (RCC_GetSYSCLKSource() != 0x08)
+        {
+        }
+
+    }
+    else
+    {
+        /* If none of the define above is enabled, the HSI is used as System clock
+        source (default after reset) */ 
+        /* Disable HSE */
+        RCC_HSEConfig(RCC_HSE_OFF);
+
+        RCC_PLLConfig(RCC_PLLSource_HSI_Div2, RCC_PLLMul_9);
+
+        RCC_PLLCmd(ENABLE);
+
+        /* Wait till PLL is ready */
+        while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+        {
+        }
+
+        /* Select PLL as system clock source */
+        RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+
+        /* Wait till PLL is used as system clock source */
+        while (RCC_GetSYSCLKSource() != 0x08)
+        {
+        }
+    } 
+
+//  RCC_APB1PeriphClockCmd(
+//            RCC_APB1Periph_I2C1
+//          | RCC_APB1Periph_I2C2 
+//          |RCC_APB1Periph_SPI2,
+//       //   | RCC_APB1Periph_USART2,
+//        ENABLE
+//        );
+//  
+//    RCC_APB2PeriphClockCmd(
+//            RCC_APB2Periph_GPIOA
+//          | RCC_APB2Periph_GPIOB
+//          | RCC_APB2Periph_GPIOC
+//          | RCC_APB2Periph_GPIOD
+//         | RCC_APB2Periph_USART1,
+//         // | RCC_APB2Periph_AFIO
+//         // | RCC_APB2Periph_SPI1,
+//        ENABLE
+//        );        
+      RCC_GetClocksFreq(&RCC_ClocksStatus);
+}
+#endif
 /*******************************************************************************
 * Function Name  : Set_USBClock
 * Description    : Configures USB Clock input (48MHz).
@@ -87,51 +252,79 @@ void Set_USBClock(void)
 #ifdef stm32f103_eval
       RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);  // 72/1.5 = 48
 #else
-    //  RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
+      RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
 #endif
-     RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
-     /* Enable USB clock */
+  /* Enable USB clock */
      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 }
 
+/*******************************************************************************
+* Function Name  : Enter_LowPowerMode.
+* Description    : Power-off system clocks and power while entering suspend mode.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
 void Enter_LowPowerMode(void)
 {
   /* Set the device state to suspend */
-  bDeviceState = SUSPENDED;
+	bDeviceState = SUSPENDED;
 }
 
+/*******************************************************************************
+* Function Name  : Leave_LowPowerMode.
+* Description    : Restores system clocks and power while exiting suspend mode.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
 void Leave_LowPowerMode(void)
 {
-  DEVICE_INFO *pInfo = &Device_Info;
+     DEVICE_INFO *pInfo = &Device_Info;
   
   /* Set the device state to the correct state */
-  if (pInfo->Current_Configuration != 0)
-  {
+     if (pInfo->Current_Configuration != 0)
+     {
     /* Device configured */
-    bDeviceState = CONFIGURED;
-  }
-  else 
-  {
-    bDeviceState = ATTACHED;
-  }  
+	 bDeviceState = CONFIGURED;
+     }
+     else 
+     {
+	 bDeviceState = ATTACHED;
+     }
 }
 
+/*******************************************************************************
+* Function Name  : USB_Interrupts_Config.
+* Description    : Configures the USB interrupts.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
 void USB_Interrupts_Config(void)
 {
      NVIC_InitTypeDef NVIC_InitStructure; 
-     NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;//USB_LP_IRQn
+     NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
      NVIC_Init(&NVIC_InitStructure);
-     // enable timer2
+   // enable timer2
      NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
      NVIC_Init(&NVIC_InitStructure);
-}
+    // 
 
+}
+/*******************************************************************************
+* Function Name : Timer2Config.
+* Description   : interrupt enable
+* Input         : None.
+* Output        : None.
+* Return value  : The direction value.
+*******************************************************************************/
 void Timer2Configuration(void)
 {
      TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -144,10 +337,16 @@ void Timer2Configuration(void)
      TIM_ITConfig(TIM2,TIM_IT_CC1,ENABLE);
      TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );	
 }
-
-void USB_Cable_Config (FunctionalState NewState)
+/*******************************************************************************
+* Function Name  : USB_Cable_Config.
+* Description    : Software Connection/Disconnection of USB Cable.
+* Input          : NewState: new state.
+* Output         : None.
+* Return         : None
+*******************************************************************************/
+void USB_Cable_Config (FunctionalState1 NewState)
 { 
-        if (NewState != DISABLE)
+	if (NewState != DISABLE1)
 	{
 		GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);		//连接USB
 	}
@@ -157,47 +356,51 @@ void USB_Cable_Config (FunctionalState NewState)
 	}
 }
 
+/*******************************************************************************
+* Function Name  : GPIO_Configuration
+* Description    : Configures the different GPIO ports.
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
 void GPIO_Configuration(void)
 {
-   GPIO_InitTypeDef GPIO_InitStructure;       
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_ResetBits( GPIOA, GPIO_Pin_11 );
-    GPIO_ResetBits( GPIOA, GPIO_Pin_12 );
-    
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-    //LCD_init_PB5
+//     GPIO_InitTypeDef GPIO_InitStructure;
+	/* USB_DISCONNECT used as USB pull-up */
+/*     GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
+     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+     GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);*/
+  
+	/* Configure SPI1 pins: SCK, MISO and MOSI ---------------------------------*/
+/*     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 |GPIO_Pin_7;
+     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//AF_PP
+     GPIO_Init(GPIOA, &GPIO_InitStructure);
+	
+     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;//MISO
+     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+     GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+     //for LED test PA3,PA2
+     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;
+     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+     GPIO_Init(GPIOA, &GPIO_InitStructure);		 */
  
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;			 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
- // GPIOB->BSRR = GPIO_Pin_5;
-  GPIO_SetBits(GPIOB,GPIO_Pin_5);
-  //???
-//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT
-//                          , ENABLE);  
-//  
-//  /* USB_DISCONNECT used as USB pull-up */
-//  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
-//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-//  GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
-}
-void DisableClock(void)
-{
-  //   RCC_APB1PeriphClockCmd(RCC_APB1Periph_ALL,DISABLE);
-  //   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ALL,DISABLE);
 }
 
+
+/*******************************************************************************
+* Function Name  : Get_SerialNum.
+* Description    : Create the serial number string descriptor.
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
 void Get_SerialNum(void)
-{    
+{
      u32 Device_Serial0, Device_Serial1;
      Device_Serial0 = *(u32*)(0x1FFFF7E8);
      Device_Serial1 = *(u32*)(0x1FFFF7EC);
@@ -215,7 +418,6 @@ void Get_SerialNum(void)
          CustomHID_StringSerial[16] = (uint8_t)((Device_Serial1 & 0xFF000000) >> 24); 
       }
 }
-#if 0
 void USB_Connect (BOOL con) 
 {
      GPIO_InitTypeDef GPIO_InitStructure;
@@ -243,5 +445,4 @@ void USB_Connect (BOOL con)
      }
   */
 }
-#endif
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

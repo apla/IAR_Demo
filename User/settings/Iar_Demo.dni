@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1718972975
+Checksum=231400198
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -36,6 +36,20 @@ ITMportsLogFile=0
 ITMlogFile=$PROJ_DIR$\ITM.log
 [JLinkDriver]
 CStepIntDis=_ 0
+[Interrupts]
+Enabled=1
+[MemConfig]
+Base=1
+Manual=0
+Ddf=1
+TypeViol=0
+Stop=1
+[Simulator]
+Freq=10000000
+MultiCoreRunAll=1
+[Trace2]
+Enabled=0
+ShowSource=0
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0
@@ -54,6 +68,12 @@ Title_0=I0
 Symbol_0=0 4 1
 LiveEnabled=0
 LiveFile=PowerLogLive.log
+[DataLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
 [EventLog]
 LogEnabled=0
 SumEnabled=0
@@ -61,10 +81,6 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
-[PowerProbe]
-Frequency=10000
-Probe0=I0
-ProbeSetup0=2 1 1 2 0 0
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -72,30 +88,14 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
-[DataLog]
-LogEnabled=0
-SumEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=1
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 1 "STD_CODE2" "{$PROJ_DIR$\screen_iic.cpp}.549.7" 0 0 1 "" 0 ""
-Count=1
-[Interrupts]
-Enabled=1
-[MemConfig]
-Base=1
-Manual=0
-Ddf=1
-TypeViol=0
-Stop=1
-[Trace1]
-Enabled=0
-ShowSource=1
-[CallStackLog]
-Enabled=0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\screen_iic.cpp}.46.8" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\screen_iic.cpp}.75.7" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\screen_iic.cpp}.561.32" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\screen_iic.cpp}.570.7" 0 0 1 "" 0 "" 0
+Count=4
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -106,12 +106,15 @@ LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
-[Simulator]
-Freq=10000000
-MultiCoreRunAll=1
+[CallStackLog]
+Enabled=0
+[PowerProbe]
+Frequency=10000
+Probe0=I0
+ProbeSetup0=2 1 1 2 0 0
 [DriverProfiling]
 Enabled=0
-Mode=1
+Mode=3
 Graph=0
 Symbiont=0
 Exclusions=

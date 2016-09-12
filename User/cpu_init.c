@@ -1,5 +1,5 @@
 
-#include "cpu_init.h"
+#include "public.h"
 
 void RCC_Config(void)
 {

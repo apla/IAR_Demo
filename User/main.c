@@ -1,6 +1,6 @@
 #include "stm32f10x.h"
 #include "delay.h"
-#include "cpu_init.h"
+#include "public.h"
 #include "usb_lib.h"
 #include "i2c1_sensor.h"
 #include "screen_iic.h" 

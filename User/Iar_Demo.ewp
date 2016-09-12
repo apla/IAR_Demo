@@ -1994,13 +1994,16 @@
       <name>$PROJ_DIR$\i2c1_sensor.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\i2c2_screen.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\main.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\my_i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\myiic2.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\screen_iic.cpp</name>
     </file>
     <file>
       <name>$PROJ_DIR$\stm32f10x_it.c</name>

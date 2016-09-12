@@ -1,7 +1,9 @@
 #include "stm32f10x.h"
+#include "delay.h"
 #include "cpu_init.h"
 #include "usb_lib.h"
 #include "i2c1_sensor.h"
+#include "screen_iic.h" 
 
 extern u8   USB_ReceiveFlg;
 extern u8   Rx_Buffer[nReportCnt];
@@ -12,8 +14,12 @@ int main(void)
 {       
   Set_System(); 
   EXTIX_Init();
+  Screen_Init();
   while(1){
-    
+      GPIO_ResetBits(GPIOB,GPIO_LED);  
+      delay_ms(500);  
+      GPIO_SetBits(GPIOB,GPIO_LED);
+      delay_ms(500);
   }
   
 #ifdef USB_HID

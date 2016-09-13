@@ -12,7 +12,7 @@
           
           
           
-        <Column0>210</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>336</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Build>
         
@@ -24,7 +24,7 @@
     <Windows>
       
       
-    <Wnd0>
+    <Wnd1>
         <Tabs>
           <Tab>
             <Identity>TabID-15229-14280</Identity>
@@ -32,11 +32,11 @@
             <Factory>Workspace</Factory>
             <Session>
               
-            <NodeDict><ExpandedNode>Iar_Demo</ExpandedNode><ExpandedNode>Iar_Demo/Output</ExpandedNode><ExpandedNode>Iar_Demo/User</ExpandedNode></NodeDict></Session>
+            <NodeDict><ExpandedNode>Iar_Demo</ExpandedNode><ExpandedNode>Iar_Demo/CMSIS</ExpandedNode><ExpandedNode>Iar_Demo/FW_lib</ExpandedNode><ExpandedNode>Iar_Demo/System</ExpandedNode><ExpandedNode>Iar_Demo/USB_lib</ExpandedNode><ExpandedNode>Iar_Demo/User</ExpandedNode><ExpandedNode>Iar_Demo/User/mpu6050</ExpandedNode><ExpandedNode>Iar_Demo/User/usb_config</ExpandedNode></NodeDict></Session>
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd0><Wnd2>
+      <SelectedTab>0</SelectedTab></Wnd1><Wnd4>
         <Tabs>
           <Tab>
             <Identity>TabID-717-15370</Identity>
@@ -46,20 +46,20 @@
           </Tab>
         <Tab><Identity>TabID-5676-4748</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-7266-6561</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-6765-13927</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab></Tabs>
         
-      <SelectedTab>1</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-12497-27064</Identity><TabName>Call Graph</TabName><Factory>PROJECT_GUI_CALL_GRAPH</Factory></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+      <SelectedTab>0</SelectedTab></Wnd4><Wnd5><Tabs><Tab><Identity>TabID-12497-27064</Identity><TabName>Call Graph</TabName><Factory>PROJECT_GUI_CALL_GRAPH</Factory></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd5></Windows>
     <Editor>
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>60</SelStart2><SelEnd2>60</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\screen_iic.cpp</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>62</SelStart2><SelEnd2>62</SelEnd2></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\screen_iic.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>1249</SelStart2><SelEnd2>1249</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\my_i2c.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>4548</SelStart2><SelEnd2>4548</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\myiic2.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>0</SelStart2><SelEnd2>0</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\i2c1_sensor.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>167</YPos2><SelStart2>6141</SelStart2><SelEnd2>6141</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\cpu_init.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>12</SelStart2><SelEnd2>18</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>348</SelStart2><SelEnd2>348</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\myiic2.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>70</YPos2><SelStart2>2647</SelStart2><SelEnd2>2647</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\screen_iic.cpp</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>33</YPos2><SelStart2>2161</SelStart2><SelEnd2>2161</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\mpu6050.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>714</SelStart2><SelEnd2>714</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\cpu_init.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>82</YPos2><SelStart2>2808</SelStart2><SelEnd2>2824</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\stm32f10x_it.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>21</YPos2><SelStart2>2617</SelStart2><SelEnd2>2617</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\spi.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>41</YPos2><SelStart2>2308</SelStart2><SelEnd2>2308</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\spi.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>259</SelStart2><SelEnd2>259</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\mpuiic.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>0</SelStart2><SelEnd2>0</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\usb_config\src\usb_istr.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>0</SelStart2><SelEnd2>0</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\usb_config\src\usb_endp.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>15</YPos2><SelStart2>2414</SelStart2><SelEnd2>2414</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\FWlib\src\stm32f10x_rcc.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>793</SelStart2><SelEnd2>793</SelEnd2></Tab><ActiveTab>11</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-00C8CC90><key>iaridepm.enu1</key></Toolbar-00C8CC90></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>521</Bottom><Right>284</Right><x>-2</x><y>-2</y><xscreen>182</xscreen><yscreen>231</yscreen><sizeHorzCX>140324</sizeHorzCX><sizeHorzCY>265517</sizeHorzCY><sizeVertCX>220509</sizeVertCX><sizeVertCY>601149</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>251</Bottom><Right>1299</Right><x>-2</x><y>-2</y><xscreen>1301</xscreen><yscreen>253</yscreen><sizeHorzCX>1003084</sizeHorzCX><sizeHorzCY>290805</sizeHorzCY><sizeVertCX>140324</sizeVertCX><sizeVertCY>265517</sizeVertCY></Rect></Wnd2></Sizes></Row0><Row1><Sizes><Wnd3><Rect><Top>249</Top><Left>-2</Left><Bottom>304</Bottom><Right>1299</Right><x>-2</x><y>249</y><xscreen>1301</xscreen><yscreen>55</yscreen><sizeHorzCX>1003084</sizeHorzCX><sizeHorzCY>63218</sizeHorzCY><sizeVertCX>104086</sizeVertCX><sizeVertCY>187356</sizeVertCY></Rect></Wnd3></Sizes></Row1></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-00DFCC90><key>iaridepm.enu1</key></Toolbar-00DFCC90></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>513</Bottom><Right>427</Right><x>-2</x><y>-2</y><xscreen>273</xscreen><yscreen>260</yscreen><sizeHorzCX>215470</sizeHorzCX><sizeHorzCY>298851</sizeHorzCY><sizeVertCX>338595</sizeVertCX><sizeVertCY>591954</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>250</Bottom><Right>1269</Right><x>-2</x><y>-2</y><xscreen>1271</xscreen><yscreen>252</yscreen><sizeHorzCX>1003157</sizeHorzCX><sizeHorzCY>289655</sizeHorzCY><sizeVertCX>215470</sizeVertCX><sizeVertCY>298851</sizeVertCY></Rect></Wnd4></Sizes></Row0><Row1><Sizes><Wnd5><Rect><Top>248</Top><Left>-2</Left><Bottom>312</Bottom><Right>1269</Right><x>-2</x><y>248</y><xscreen>1271</xscreen><yscreen>64</yscreen><sizeHorzCX>1003157</sizeHorzCX><sizeHorzCY>73563</sizeHorzCY><sizeVertCX>160221</sizeVertCX><sizeVertCY>211494</sizeVertCY></Rect></Wnd5></Sizes></Row1></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

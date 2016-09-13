@@ -85,6 +85,8 @@ void RCC_Config(void)
         }
     }
 }
+
+//音量按键IO初始化
 static void KEY_Init(void)
 { 
  	GPIO_InitTypeDef GPIO_InitStructure;        
@@ -94,12 +96,12 @@ static void KEY_Init(void)
  	GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
-        
+//外部中断初始化        
 void EXTIX_Init(void)
 {
    	EXTI_InitTypeDef EXTI_InitStructure;
  	NVIC_InitTypeDef NVIC_InitStructure;
-        KEY_Init();
+        KEY_Init();//按键初始化
         NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
   	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);//复用功能使能
  	

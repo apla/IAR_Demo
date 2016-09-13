@@ -122,7 +122,7 @@ void MPU6050_RD_XYZ(MPU_TypeDef* Mympu)
 		if(i==13)buf[i]=IIC_Read_Byte(0);//读取一个字节,不继续再读,发送NACK  
 		else buf[i]=IIC_Read_Byte(1);	//读取一个字节,继续读,发送ACK 
  	}	        	   
-  IIC_Stop();					//产生一个停止条件
+        IIC_Stop();					//产生一个停止条件
 	Mympu->Ax=(short)(((u16)buf[0]<<8)+buf[1]); 
 	Mympu->Ay=(short)(((u16)buf[2]<<8)+buf[3]); 
 	Mympu->Az=(short)(((u16)buf[4]<<8)+buf[5]); 

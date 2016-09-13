@@ -55,3 +55,32 @@ void PB5_PWM(void)//ok PB5_PWM
 	TIM3->CR1|=0x01;    	//ê1?ü?¨ê±?÷3 		
 	TIM3->CCR2 = 512;
 }
+
+
+
+//      GPIO_ResetBits(GPIOB,GPIO_Pin_5);  
+//      delay_ms(500);  		   
+//      delay_us(1000000);
+//      GPIO_SetBits(GPIOB,GPIO_Pin_5);
+//      delay_ms(500);                 
+//      delay_us(1000000);    
+//led 亮度
+ u8 i,cnt_pulse=0;
+       static u8 start_data,end_data = 1;//最开始为1 datesheet:p8  (1-32)
+       end_data = start_data + 3;//每次变化三个单位
+       if(end_data > 32){
+          end_data = 1;
+       }
+       cnt_pulse = start_data + 32 - end_data;
+       start_data += 3;
+       GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+  //     GPIO_ResetBits(GPIOA,LCD0_BL_EN);//背光 LCD0_BL_EN
+       delay_ms(3);  
+       for(i=0;i< cnt_pulse;i++){  //1-32(less-)  
+           GPIO_SetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+           GPIO_ResetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+       }
+     GPIO_SetBits(GPIOA,LCD0_BL_EN);
+    EXTI_ClearITPendingBit(EXTI_Line1); 

@@ -70,16 +70,16 @@
         <option>
           <name>GRuntimeLibSelect</name>
           <version>0</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>GRuntimeLibSelectSlave</name>
           <version>0</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+          <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
         </option>
         <option>
           <name>OGProductVersion</name>
@@ -133,7 +133,7 @@
         </option>
         <option>
           <name>RTConfigPath2</name>
-          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Full.h</state>
         </option>
         <option>
           <name>GFPUCoreSlave</name>
@@ -1942,6 +1942,9 @@
     <file>
       <name>$PROJ_DIR$\..\System\delay\delay.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\System\sys\sys.c</name>
+    </file>
   </group>
   <group>
     <name>USB_lib</name>
@@ -1967,6 +1970,18 @@
   <group>
     <name>User</name>
     <group>
+      <name>mpu6050</name>
+      <file>
+        <name>$PROJ_DIR$\mpu6050.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\mpuiic.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\spi.c</name>
+      </file>
+    </group>
+    <group>
       <name>usb_config</name>
       <file>
         <name>$PROJ_DIR$\usb_config\src\hw_config.c</name>
@@ -1991,13 +2006,7 @@
       <name>$PROJ_DIR$\cpu_init.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\i2c1_sensor.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\my_i2c.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\myiic2.c</name>
@@ -2007,9 +2016,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\stm32f10x_it.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\System\sys\sys.c</name>
     </file>
   </group>
 </project>

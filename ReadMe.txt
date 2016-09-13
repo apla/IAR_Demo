@@ -1,0 +1,3 @@
+1. usb hid ok.
+2. screen iic ok.
+3. sensor todo....

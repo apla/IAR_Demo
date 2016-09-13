@@ -24,6 +24,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "usb_istr.h"
+#include "delay.h"
+#include "public.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -52,15 +54,55 @@ void USB_LP_CAN1_RX0_IRQHandler(void)//start.s
 {
     USB_Istr();
 }
-void EXTI0_IRQHandler(void)
+static const u8 STEP_SIZE = 1;
+static u8 start_data = 1;
+void EXTI0_IRQHandler(void) //Volume_Dn;PA0
 {
-   GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
-   EXTI_ClearITPendingBit(EXTI_Line0); 
+       u8 i,cnt_pulse=0;
+       //最开始为1 datesheet:p8  (1-32)      
+       start_data += STEP_SIZE;
+       if(start_data > 32){//每次变化1个单位
+          start_data = 1;
+          cnt_pulse = 32 + 32 - 1;
+       }else{
+          cnt_pulse = 1+STEP_SIZE + 32 -1;//after + 32 - before
+       }
+  //   GPIO_ResetBits(GPIOA,LCD0_BL_EN);//背光 LCD0_BL_EN
+       delay_ms(3);  
+       for(i=0;i< cnt_pulse;i++){  //1-32(less-)  
+           GPIO_SetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+           GPIO_ResetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+       }
+     GPIO_SetBits(GPIOA,LCD0_BL_EN);
+     GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+     EXTI_ClearITPendingBit(EXTI_Line0); 
 }
-void EXTI1_IRQHandler(void)
+//Option 1: send in 24 pulses (19(start)+32-27(end) = 24);
+//Option 2: pull low for 3ms and then send in 19 pulses.
+void EXTI1_IRQHandler(void)//Volume_Up;PA1
 {
-  GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
-  EXTI_ClearITPendingBit(EXTI_Line1); 
+       u8 i,cnt_pulse=0;
+       //最开始为1 datesheet:p8  (1-32)     
+       start_data -= STEP_SIZE;
+       if(start_data < 1){//每次变化1个单位
+          start_data = 32;
+          cnt_pulse = 1+32-32;
+       }else{
+          cnt_pulse = 1+ 32 -(STEP_SIZE+1);//降低亮度
+       }
+  //   GPIO_ResetBits(GPIOA,LCD0_BL_EN);//背光 LCD0_BL_EN
+       delay_ms(3);  
+       for(i=0;i< cnt_pulse;i++){  //1-32(less-)  
+           GPIO_SetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+           GPIO_ResetBits(GPIOA,LCD0_BL_EN);
+           delay_us(1);
+       }
+     GPIO_SetBits(GPIOA,LCD0_BL_EN);
+     GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+    EXTI_ClearITPendingBit(EXTI_Line1); 
 }
 void TIM2_IRQHandler(void)  // 1s enter
 {

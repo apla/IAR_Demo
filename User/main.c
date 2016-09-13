@@ -5,46 +5,32 @@
 #include "i2c1_sensor.h"
 #include "screen_iic.h" 
 
-extern u8   USB_ReceiveFlg;
-extern u8   Rx_Buffer[nReportCnt];
-extern u8   Tx_Buffer[nReportCnt];
+extern u8    USB_ReceiveFlg;
+extern u8    Rx_Buffer[nReportCnt];
+extern u8    Tx_Buffer[nReportCnt];
 extern void USB_SendString(u8 *str);
 
 int main(void)
 {       
+  //INTX_DISABLE();
   Set_System(); 
   EXTIX_Init();
   Screen_Init();
+  // INTX_ENABLE();
   while(1){
-      GPIO_ResetBits(GPIOB,GPIO_LED);  
-      delay_ms(500);  
-      GPIO_SetBits(GPIOB,GPIO_LED);
-      delay_ms(500);
+      
   }
   
 #ifdef USB_HID
   USB_Interrupts_Config();
   Set_USBClock();
   USB_Init();
-  USB_ReceiveFlg = FALSE;
-  //I2C_Screen_Init();  
-  
-  //I2C_ByteWrite(0x02,buf);
- // I2C_ByteWrite(0x01, 0x10);//LCM_AVEE: -5.6v 
- // I2C_ByteWrite(0x00, 0x12);//LCM_AVDD: 5.8v   
-  
-  //I2C_BufferRead(u8* pBuffer, u8 ReadAddr, u16 NumByteToRead); 
+  USB_ReceiveFlg = FALSE; 
   while(1){
         if(USB_ReceiveFlg == TRUE){
            USB_ReceiveFlg = FALSE;
            USB_SendString(Rx_Buffer);           
-         }
-//      GPIO_ResetBits(GPIOB,GPIO_Pin_5);  
-//      delay_ms(500);  		   
-//      delay_us(1000000);
-//      GPIO_SetBits(GPIOB,GPIO_Pin_5);
-//      delay_ms(500);                 
-//      delay_us(1000000);        
+         }    
   }	
 #endif
 }
@@ -63,3 +49,6 @@ void USB_SendString(u8 *str)
      SetEPTxValid(ENDP2);//使能端点2的发送状态
      //GetEPTxStatus(ENDP1);检测是否发送结束 (EP_TX_VALID,EP_TX_NAK)
 }
+
+
+/******************* (C) COPYRIGHT 2011 Idealens *****END OF FILE****/

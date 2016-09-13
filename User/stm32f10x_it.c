@@ -25,7 +25,7 @@
 #include "stm32f10x_it.h"
 #include "usb_istr.h"
 #include "delay.h"
-#include "public.h"
+#include "Constants.h"
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */

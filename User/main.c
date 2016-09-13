@@ -1,6 +1,6 @@
 #include "stm32f10x.h"
 #include "delay.h"
-#include "public.h"
+#include "Constants.h"
 #include "usb_lib.h"
 #include "i2c1_sensor.h"
 #include "screen_iic.h" 
@@ -27,10 +27,10 @@ int main(void)
   USB_Init();
   USB_ReceiveFlg = FALSE; 
   while(1){
-        if(USB_ReceiveFlg == TRUE){
-           USB_ReceiveFlg = FALSE;
-           USB_SendString(Rx_Buffer);           
-         }    
+    if(USB_ReceiveFlg == TRUE){
+      USB_ReceiveFlg = FALSE;
+      USB_SendString(Rx_Buffer);           
+    }    
   }	
 #endif
 }

@@ -4,11 +4,13 @@
 #include "usb_lib.h"
 #include "i2c1_sensor.h"
 #include "screen_iic.h" 
-
+#include "mpu6500.h"
 extern u8    USB_ReceiveFlg;
 extern u8    Rx_Buffer[nReportCnt];
 extern u8    Tx_Buffer[nReportCnt];
 extern void USB_SendString(u8 *str);
+extern  u8 InReport[];
+int   temp1[3], temp2[3];
 
 int main(void)
 {       
@@ -17,8 +19,10 @@ int main(void)
   EXTIX_Init();
   Screen_Init();
   // INTX_ENABLE();
+  MPU6500_Init();
   while(1){
-      
+      MPU_ReadData( temp1 , temp2 );
+      USB_SIL_Write(0x81, InReport,62);
   }
   
 #ifdef USB_HID
@@ -30,7 +34,7 @@ int main(void)
     if(USB_ReceiveFlg == TRUE){
       USB_ReceiveFlg = FALSE;
       USB_SendString(Rx_Buffer);           
-    }    
+    }
   }	
 #endif
 }
@@ -49,6 +53,7 @@ void USB_SendString(u8 *str)
      SetEPTxValid(ENDP2);//使能端点2的发送状态
      //GetEPTxStatus(ENDP1);检测是否发送结束 (EP_TX_VALID,EP_TX_NAK)
 }
+
 
 
 /******************* (C) COPYRIGHT 2011 Idealens *****END OF FILE****/

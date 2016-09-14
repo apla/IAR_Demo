@@ -62,7 +62,7 @@ typedef enum {DISABLE1 = 0, ENABLE1 = !DISABLE1} FunctionalState1;
 #define ENDP1_TXADDR        (0xD8)
 //EP2
 //#define ENDP2_RXADDR        (0x118)
-#define ENDP2_TXADDR        (0x118)
+#define ENDP2_TXADDR        (0x118)  //#define EP1_IN      ((uint8_t)0x81) 
 
 #else
 #define EP_NUM     (4)

@@ -1970,9 +1970,9 @@
   <group>
     <name>User</name>
     <group>
-      <name>mpu6050</name>
+      <name>mpu6500</name>
       <file>
-        <name>$PROJ_DIR$\mpu6050.c</name>
+        <name>$PROJ_DIR$\mpu6500.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\mpuiic.c</name>

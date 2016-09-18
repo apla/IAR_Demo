@@ -19,24 +19,17 @@ int main(void)
   EXTIX_Init();
   Screen_Init();
   // INTX_ENABLE();
-  MPU6500_Init();
-  while(1){
-      MPU_ReadData( temp1 , temp2 );
-      USB_SIL_Write(0x81, InReport,62);
-  }
-  
-#ifdef USB_HID
   USB_Interrupts_Config();
   Set_USBClock();
   USB_Init();
   USB_ReceiveFlg = FALSE; 
+  
+  MPU6500_Init();
   while(1){
-    if(USB_ReceiveFlg == TRUE){
-      USB_ReceiveFlg = FALSE;
-      USB_SendString(Rx_Buffer);           
-    }
-  }	
-#endif
+      MPU_ReadData( temp1 , temp2 );
+      USB_SIL_Write(0x81, InReport,62);
+      delay_us(10);
+  }
 }
 
 //Êý¾Ý·¢ËÍ: UserToPMABufferCopy--->SetEPTxCount--->SetEPTxValid 

@@ -84,3 +84,14 @@ void PB5_PWM(void)//ok PB5_PWM
        }
      GPIO_SetBits(GPIOA,LCD0_BL_EN);
     EXTI_ClearITPendingBit(EXTI_Line1); 
+    
+    
+    
+    #ifdef USB_HID  
+  while(1){
+    if(USB_ReceiveFlg == TRUE){
+      USB_ReceiveFlg = FALSE;
+      USB_SendString(Rx_Buffer);           
+    }
+  }	
+#endif

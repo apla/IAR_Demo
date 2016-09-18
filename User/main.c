@@ -14,21 +14,28 @@ int   temp1[3], temp2[3];
 
 int main(void)
 {       
+  u8 temp=0;
   //INTX_DISABLE();
   Set_System(); 
-  EXTIX_Init();
-  Screen_Init();
+  EXTIX_Init();  
   // INTX_ENABLE();
+  //USB HID config
   USB_Interrupts_Config();
   Set_USBClock();
   USB_Init();
   USB_ReceiveFlg = FALSE; 
-  
+  //Shape_4k config
+  Screen_Init();
   MPU6500_Init();
   while(1){
+      InReport[1] = ++temp;
       MPU_ReadData( temp1 , temp2 );
-      USB_SIL_Write(0x81, InReport,62);
-      delay_us(10);
+    //  USB_SIL_Write(0x81, InReport,62);
+      USB_SendString(InReport);
+      delay_ms(300);
+      GPIO_SetBits(GPIOB,GPIO_LED); 
+      delay_ms(300);
+      GPIO_ResetBits(GPIOB,GPIO_LED); 
   }
 }
 

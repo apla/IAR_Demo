@@ -169,6 +169,9 @@ void MPU_ReadBuf( u8 ReadAddr, u8 *ReadBuf, u8 Bytes )
     MPU6500_CS = 1;
 	
 }
+
+
+#if 0
 /////////////////////////////////////////////////////////
 //初始化MPU6050  #define	CS 		PBout(12)  		//cs
 //返回值:0,成功  
@@ -403,5 +406,5 @@ u8 MPU_Read_Byte(u8 reg)
         MPU_IIC_Stop();			//产生一个停止条件 
 	return res;		
 }
-
+#endif
 /*************************END OF FILE*************************************/

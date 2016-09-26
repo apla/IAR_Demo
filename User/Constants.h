@@ -20,6 +20,7 @@ void EXTIX_Init(void);
 #define MCU_OLED_0_RST GPIO_Pin_14 //PC14
 #define MCU_OLED_1_RST GPIO_Pin_13 //PC13
 
+
 #ifdef debug1
     #define ITM_Port8(n)    (*((volatile unsigned char *)(0xE0000000+4*n)))
     #define ITM_Port16(n)   (*((volatile unsigned short*)(0xE0000000+4*n)))
@@ -41,4 +42,5 @@ struct __FILE { int handle; /* Add whatever you need here */ };
  }
 #endif
     
+ 
 #endif // __CPU_INIT_H

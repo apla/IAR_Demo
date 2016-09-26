@@ -11,7 +11,8 @@ void Screen_Write(u16 WriteAddr,u8 *pBuffer,u16 NumToWrite);	//从指定地址�
 void Screen_Read(u16 ReadAddr,u8 *pBuffer,u16 NumToRead);   	//从指定地址开始读出指定长度的数据
 
 void Screen_Init(void);   //初始化IIC
-void Screen_Config(void);
+void sharp_lin_1440_2560(void);
+void Screen_Config_1920_1080(void);
 
 void Vot_WriteByte(u8 WriteAddr,u8 DataToWrite);
 void Vot_WriteByte(u8 WriteAddr,u8 DataToWrite);

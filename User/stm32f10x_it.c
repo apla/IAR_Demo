@@ -102,10 +102,21 @@ void EXTI1_IRQHandler(void)//Volume_Up;PA1
        }
      GPIO_SetBits(GPIOA,LCD0_BL_EN);
      GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
-    EXTI_ClearITPendingBit(EXTI_Line1); 
+     EXTI_ClearITPendingBit(EXTI_Line1); 
 }
+
 void TIM2_IRQHandler(void)  // 1s enter
-{
+{    
+     static u16 cnt = 0;
+     if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+     {
+         //usbsend
+         if(++cnt == 1000){
+              cnt = 0;
+              GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
+         }
+         TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );
+     }
 #if 0
      static BOOL flag = FALSE;
      if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
@@ -122,6 +133,7 @@ void TIM2_IRQHandler(void)  // 1s enter
      }  
 #endif
 }
+
 /**
   * @brief  This function handles Hard Fault exception.
   * @param  None

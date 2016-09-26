@@ -1,3 +1,5 @@
+//IIC2 is used for screen config.
+
 #include "myiic2.h"
 #include "delay.h"
  //delay_us(4);

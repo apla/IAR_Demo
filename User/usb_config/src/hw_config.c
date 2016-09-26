@@ -54,7 +54,7 @@ void Set_System(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-  //  Timer2Configuration();
+ //   Timer2Configuration();//1ms = 1000kHz
     LED_Init();
     delay_init();
     //GPIO_Config();
@@ -62,7 +62,7 @@ void Set_System(void)
 
 void LED_Init(void)
 {
-  //our:pb5
+  //PB5
   GPIO_InitTypeDef GPIO_InitStructure;
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;			 
@@ -249,12 +249,9 @@ void RCC_Configuration(void)
 *******************************************************************************/
 void Set_USBClock(void)
 {
-  // Select USBCLK source 
-#ifdef stm32f103_eval
-      RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);  // 72/1.5 = 48
-#else
-      RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
-#endif
+     // Select USBCLK source 
+     //RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);  // 72/1.5 = 48
+     RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
   /* Enable USB clock */
      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 }
@@ -310,14 +307,12 @@ void USB_Interrupts_Config(void)
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
      NVIC_Init(&NVIC_InitStructure);
-   // enable timer2
+     // enable timer2
      NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
      NVIC_Init(&NVIC_InitStructure);
-    // 
-
 }
 /*******************************************************************************
 * Function Name : Timer2Config.
@@ -327,11 +322,13 @@ void USB_Interrupts_Config(void)
 * Return value  : The direction value.
 *******************************************************************************/
 void Timer2Configuration(void)
-{
+{    //1ms = 1000kHz Tout= ((arr +1))*(psc+1 )) /Tclk；50*1440/72M = 0.001s APB1_clk = 36M
      TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-     TIM_TimeBaseStructure.TIM_Period = 10000-1;  //  1s:20000  1ms*1000=1s
-     TIM_TimeBaseStructure.TIM_Prescaler = 1600; //36MHZ/3600 =10Khz      
-     TIM_TimeBaseStructure.TIM_ClockDivision = 0;   //36MHZ 
+     //TIM_DeInit(TIM2);
+     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+     TIM_TimeBaseStructure.TIM_Period = 10;//定时器周期 20us计数一次,计数50次,为1ms 50 1439  359/10
+     TIM_TimeBaseStructure.TIM_Prescaler = 720-1;//预分频数,72M/(pre+1) = 50k,20us
+     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;//0;   //36MHZ TIM_CKD_DIV2:72M
      TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //Mode;
      TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
      TIM_Cmd(TIM2, ENABLE);

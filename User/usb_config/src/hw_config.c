@@ -35,26 +35,36 @@ void LED_Init(void);
 void GPIO_Config(void);
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
+void Timer2Configuration(void)
+{   
+    //1ms = 1000kHz Tout= ((arr +1))*(psc+1 )) /Tclk￡?50*1440/72M = 0.001s APB1_clk = 36M
+     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+      NVIC_InitTypeDef NVIC_InitStructure; 
+     // enable timer2
+     NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
+     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+     NVIC_Init(&NVIC_InitStructure);
+     
+     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+     TIM_DeInit(TIM2);
+     TIM_TimeBaseStructure.TIM_Period = 100;//?¨ê±?÷?ü?ú 20us??êyò?′?,??êy50′?,?a1ms 50 1439  359/10
+     TIM_TimeBaseStructure.TIM_Prescaler = 480-1;//24000*2-1;//?¤·??μêy,72M/(pre1439+1) = 50k,20us
+     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;//0;   //36MHZ TIM_CKD_DIV2:72M  24M
+     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //Mode;
+     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+  //   TIM_ITConfig(TIM2,TIM_IT_CC1,ENABLE);
+  //   TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );	
+     TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
+     TIM_ClearITPendingBit(TIM2, TIM_IT_Update );	
+     TIM_Cmd(TIM2, ENABLE);
+} 
 
 void Set_System(void)
 {
     RCC_Configuration();
-    //NVIC_Config
-    NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00); 
-    GPIO_InitTypeDef GPIO_InitStructure;       
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_ResetBits( GPIOA, GPIO_Pin_11 );
-    GPIO_ResetBits( GPIOA, GPIO_Pin_12 );
-    
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 ;	//USBDM and USBDP		 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
- //   Timer2Configuration();//1ms = 1000kHz
+  //  Timer2Configuration();//1ms = 1000kHz
     LED_Init();
     delay_init();
     //GPIO_Config();
@@ -165,7 +175,7 @@ void RCC_Configuration(void)
         /* PCLK2 = HCLK */
         RCC_PCLK2Config(RCC_HCLK_Div1); 
         
-        /* PCLK1 = HCLK/2 */
+        /* PCLK1 = HCLK/2  24M*/
         RCC_PCLK1Config(RCC_HCLK_Div2);
         
         /* Flash 2 wait state */
@@ -175,7 +185,7 @@ void RCC_Configuration(void)
         FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
       
         /* PLLCLK = 8MHz * 6 = 48 MHz */
-        RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_6);
+        RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_6);//HSE/2 * 6 = 48
 
         /* Enable PLL */ 
         RCC_PLLCmd(ENABLE);
@@ -185,7 +195,7 @@ void RCC_Configuration(void)
         {
         }
 
-        /* Select PLL as system clock source */
+        /* Select PLL as system clock source 48M*/
         RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
 
         /* Wait till PLL is used as system clock source */
@@ -251,7 +261,7 @@ void Set_USBClock(void)
 {
      // Select USBCLK source 
      //RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);  // 72/1.5 = 48
-     RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);
+     RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_Div1);//48M
   /* Enable USB clock */
      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
 }
@@ -303,38 +313,13 @@ void USB_Interrupts_Config(void)
 {
      NVIC_InitTypeDef NVIC_InitStructure; 
      NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;//Timer2:2 lowp
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-     NVIC_Init(&NVIC_InitStructure);
-     // enable timer2
-     NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
-     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-     NVIC_Init(&NVIC_InitStructure);
+     NVIC_Init(&NVIC_InitStructure);    
 }
-/*******************************************************************************
-* Function Name : Timer2Config.
-* Description   : interrupt enable
-* Input         : None.
-* Output        : None.
-* Return value  : The direction value.
-*******************************************************************************/
-void Timer2Configuration(void)
-{    //1ms = 1000kHz Tout= ((arr +1))*(psc+1 )) /Tclk；50*1440/72M = 0.001s APB1_clk = 36M
-     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-     //TIM_DeInit(TIM2);
-     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
-     TIM_TimeBaseStructure.TIM_Period = 10;//定时器周期 20us计数一次,计数50次,为1ms 50 1439  359/10
-     TIM_TimeBaseStructure.TIM_Prescaler = 720-1;//预分频数,72M/(pre+1) = 50k,20us
-     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;//0;   //36MHZ TIM_CKD_DIV2:72M
-     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //Mode;
-     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-     TIM_Cmd(TIM2, ENABLE);
-     TIM_ITConfig(TIM2,TIM_IT_CC1,ENABLE);
-     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );	
-}
+
+
 /*******************************************************************************
 * Function Name  : USB_Cable_Config.
 * Description    : Software Connection/Disconnection of USB Cable.

@@ -11,7 +11,7 @@ int main(void)
 {       
       // u8 temp=0;
       //INTX_DISABLE();
-      Set_System(); 
+      Set_System();
       EXTIX_Init();
       // INTX_ENABLE();
       //USB HID config
@@ -22,6 +22,7 @@ int main(void)
       //Shape_4k config
       Screen_Init();
       //MPU6500_Init();
+      Timer2Configuration();
       while(1){
           //tc358870_hotplug();
           /*

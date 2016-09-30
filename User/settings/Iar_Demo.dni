@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-112403461
+Checksum=771814191
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -109,8 +109,11 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\mpu6500.c}.57.2" 0 0 1 "" 0 "" 0
-Count=1
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\CMSIS\system_stm32f10x.c}.262.3" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\stm32f10x_it.c}.111.6" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\stm32f10x_it.c}.115.15" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_DATA" "sharp_lin_1440_2560" 0 0 0 0 4294967295
+Count=4
 [Aliases]
 Count=0
 SuppressDialog=0

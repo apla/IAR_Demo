@@ -111,7 +111,7 @@ void EXTIX_Init(void)
         EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	
   	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
   	EXTI_Init(&EXTI_InitStructure);
-        //PA1_Volume_Up
+        //PA1_Volume_Up pcb_up.
  	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA,GPIO_PinSource1); 
   	EXTI_InitStructure.EXTI_Line=EXTI_Line1;
   	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;

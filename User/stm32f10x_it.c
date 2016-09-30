@@ -108,14 +108,15 @@ void EXTI1_IRQHandler(void)//Volume_Up;PA1
 void TIM2_IRQHandler(void)  // 1s enter
 {    
      static u16 cnt = 0;
-     if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) //TIM_IT_Update(overflow) TIM_IT_CC1
      {
          //usbsend
          if(++cnt == 1000){
               cnt = 0;
               GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))));
          }
-         TIM_ClearITPendingBit(TIM2, TIM_IT_CC1 );
+      //   TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+          TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
      }
 #if 0
      static BOOL flag = FALSE;
